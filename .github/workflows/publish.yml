@@ -14,19 +14,17 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - name: Install dependencies without playwright
+      - name: Install dependencies
         run: |
           node -e "
-            const pkg = require('./package.json');
+            const pkg = JSON.parse(require('fs').readFileSync('package.json', 'utf8'));
             delete pkg.dependencies.playwright;
-            delete pkg.devDependencies;
-            require('fs').writeFileSync('package.json.bak', JSON.stringify(pkg, null, 2));
+            delete pkg.scripts.prepare;
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
-          cp package.json package.json.orig
-          cp package.json.bak package.json
           rm -f package-lock.json
           npm install
-          cp package.json.orig package.json
+          git checkout package.json
 
       - run: npm run build
 
