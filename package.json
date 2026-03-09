@@ -16,7 +16,10 @@
     "build": "tsup && cp -r src/data dist/data",
     "prepare": "npm run build",
     "dev": "tsx src/cli.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "riseup",
@@ -47,6 +50,7 @@
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
+    "vitepress": "^1.6.3",
     "vitest": "^3.0.8"
   }
 }
