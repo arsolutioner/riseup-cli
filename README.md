@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="logo.png" alt="riseup-cli" width="200">
+
 # riseup-cli
 
 **Unofficial CLI for [RiseUp](https://www.riseup.co.il) personal finance**
