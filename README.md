@@ -18,7 +18,7 @@ Query your spending, income, balances, and more — straight from the terminal.
 
 <br>
 
-[Installation](#installation) · [Commands](#commands) · [Claude Code Skill](#claude-code-skill) · [Docs](https://arsolutioner.github.io/riseup-cli/) · [Contributing](#contributing)
+[Installation](#installation) · [Commands](#commands) · [Claude Skill](#claude-code-and-claude-desktop-skill) · [Docs](https://arsolutioner.github.io/riseup-cli/) · [Contributing](#contributing)
 
 </div>
 
@@ -148,15 +148,15 @@ Commands that accept a `[month]` argument support:
 | `-N` | `riseup spending -2` | N months back |
 | `YYYY-MM` | `riseup spending 2026-01` | Specific month |
 
-## Claude Code Skill
+## Claude Code and Claude Desktop Skill
 
-riseup-cli ships with a [Claude Code](https://claude.com/claude-code) skill so Claude can query your finances directly using natural language.
+riseup-cli ships with a skill that works with [Claude Code](https://claude.com/claude-code) and [Claude Desktop](https://claude.com/download) (Cowork) so Claude can query your finances directly using natural language.
 
 ```bash
 riseup skill install       # Install the skill
 ```
 
-Then just ask Claude:
+Then just ask Claude in Claude Code or Cowork:
 
 - *"How much did I spend this month?"*
 - *"What are my subscriptions?"*

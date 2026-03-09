@@ -1,6 +1,8 @@
-# Claude Code Skill
+# Claude Code and Claude Desktop Skill
 
-riseup-cli ships with a [Claude Code](https://claude.com/claude-code) skill so Claude can query your finances directly using natural language.
+riseup-cli ships with a skill that works with [Claude Code](https://claude.com/claude-code) and [Claude Desktop](https://claude.com/download) (Cowork) so Claude can query your finances directly using natural language.
+
+The skill is shared between Claude Code and Cowork — install once, use in both.
 
 ## Installation
 

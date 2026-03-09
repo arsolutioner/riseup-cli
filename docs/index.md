@@ -25,6 +25,6 @@ features:
     details: Filter transactions by merchant, category, amount range, and type. Sort and slice your data.
   - title: Trends and Insights
     details: Month-over-month comparison of income vs. expenses. AI-generated financial insights from RiseUp.
-  - title: Claude Code Skill
-    details: Ask Claude about your finances in natural language. Install the skill with one command.
+  - title: Claude Code and Desktop Skill
+    details: Ask Claude about your finances in natural language. Works with Claude Code and Claude Desktop (Cowork).
 ---

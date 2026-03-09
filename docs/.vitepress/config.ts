@@ -16,7 +16,7 @@ export default defineConfig({
       { text: 'Guide', link: '/getting-started' },
       { text: 'Commands', link: '/commands' },
       { text: 'API Reference', link: '/api' },
-      { text: 'Claude Code Skill', link: '/claude-code-skill' },
+      { text: 'Claude Skill', link: '/claude-code-skill' },
     ],
 
     sidebar: [
@@ -26,7 +26,7 @@ export default defineConfig({
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Commands', link: '/commands' },
           { text: 'API Reference', link: '/api' },
-          { text: 'Claude Code Skill', link: '/claude-code-skill' },
+          { text: 'Claude Skill', link: '/claude-code-skill' },
           { text: 'Contributing', link: '/contributing' },
         ],
       },
