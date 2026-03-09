@@ -1,8 +1,10 @@
 import chalk from "chalk";
 import type { Command } from "commander";
+import type { Budget } from "../client/types.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
+import { offsetMonth } from "../utils/dates.js";
 import { withClient } from "./helpers.js";
 
 // ── Types ────────────────────────────────────
@@ -20,19 +22,6 @@ interface CategoryRow {
 }
 
 // ── Helpers ──────────────────────────────────
-
-/**
- * Compute "YYYY-MM" for the current month offset by `delta` months.
- * Used to calculate the start date for fetching multiple budget months.
- */
-function offsetMonth(delta: number): string {
-  const now = new Date();
-  now.setDate(1);
-  now.setMonth(now.getMonth() + delta);
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  return `${year}-${month}`;
-}
 
 // ── Action ───────────────────────────────────
 
@@ -76,7 +65,7 @@ export async function trendsAction(
 // ── By Total ─────────────────────────────────
 
 function showByTotal(
-  budgets: Array<{ budgetDate: string; envelopes: Array<{ actuals: Array<{ isIncome: boolean; incomeAmount: number | null; billingAmount: number | null }> }> }>,
+  budgets: Budget[],
   json: boolean,
 ): void {
   const rows: MonthTotal[] = budgets.map((budget) => {
@@ -121,7 +110,7 @@ function showByTotal(
 // ── By Category ──────────────────────────────
 
 function showByCategory(
-  budgets: Array<{ budgetDate: string; envelopes: Array<{ actuals: Array<{ isIncome: boolean; billingAmount: number | null; expense: string }> }> }>,
+  budgets: Budget[],
   json: boolean,
 ): void {
   // Accumulate category totals across all months to find top 8.

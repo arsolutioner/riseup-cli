@@ -16,13 +16,14 @@ export async function banksAction(
 
   await withClient(async (client) => {
     const settings = await client.account.credentials();
+    const configs = settings.credentialsConfigurations ?? [];
 
     if (json) {
-      printJson(settings.credentialsConfigurations);
+      printJson(configs);
       return;
     }
 
-    if (settings.credentialsConfigurations.length === 0) {
+    if (configs.length === 0) {
       console.log("No connected banks or cards.");
       return;
     }
@@ -31,7 +32,7 @@ export async function banksAction(
       head: ["Bank", "Name", "Status", "Accounts", "Open Banking"],
     });
 
-    for (const cred of settings.credentialsConfigurations) {
+    for (const cred of configs) {
       table.push([
         cred.bankIdentifier,
         cred.name,

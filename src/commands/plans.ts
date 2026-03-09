@@ -37,8 +37,8 @@ export async function plansAction(
 
     for (const plan of plans) {
       const name = String(plan.name ?? plan.planName ?? "(unnamed)");
-      const target = Number(plan.targetAmount ?? plan.target ?? 0);
-      const current = Number(plan.currentAmount ?? plan.current ?? 0);
+      const target = Number(plan.targetAmount ?? plan.target ?? 0) || 0;
+      const current = Number(plan.currentAmount ?? plan.current ?? 0) || 0;
 
       let progress: string;
       if (target > 0) {
