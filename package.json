@@ -1,19 +1,36 @@
 {
   "name": "riseup-cli",
   "version": "0.1.0",
-  "description": "Unofficial CLI for RiseUp personal finance",
+  "description": "Unofficial CLI for RiseUp personal finance (input.riseup.co.il)",
   "type": "module",
   "bin": {
     "riseup": "./dist/cli.js"
   },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsx src/cli.ts",
     "test": "vitest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "riseup",
+    "finance",
+    "cli",
+    "israel",
+    "budget",
+    "spending"
+  ],
+  "author": "Amram Englander",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arsolutioner/riseup-cli.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "chalk": "^5.4.1",
     "cli-table3": "^0.6.5",

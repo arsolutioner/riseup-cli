@@ -5,10 +5,16 @@ dist/
 captured-api.json
 api-map.json
 
+# Dev/research scripts
+capture-api.js
+fetch-feb.js
+analyze-capture.py
+
 # Chrome profile directories
 .chrome-cdp-profile/
 .chrome-profile/
 .chromium-profile/
+browser-profile/
 
 # OS files
 .DS_Store
