@@ -4,7 +4,8 @@
   "description": "Unofficial CLI for RiseUp personal finance, query your spending, income and balances from the terminal",
   "type": "module",
   "bin": {
-    "riseup": "./dist/cli.js"
+    "riseup": "./dist/cli.js",
+    "riseup-cli": "./dist/cli.js"
   },
   "files": [
     "dist/",
