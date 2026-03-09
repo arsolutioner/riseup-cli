@@ -1,6 +1,6 @@
 {
   "name": "riseup-cli",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Unofficial CLI for RiseUp personal finance",
   "type": "module",
   "bin": {
@@ -16,13 +16,13 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.4.1",
-    "chrome-remote-interface": "^0.28.2",
     "cli-table3": "^0.6.5",
     "commander": "^13.1.0",
     "playwright": "^1.58.2"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
+    "chrome-remote-interface": "^0.28.2",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",

@@ -104,4 +104,12 @@ accountCmd
   .description("Show subscription details")
   .action(subscriptionAction);
 
+program.hook("preAction", (thisCommand) => {
+  const opts = thisCommand.optsWithGlobals();
+  if (opts.color === false) {
+    // chalk 5 checks this env var lazily
+    process.env["NO_COLOR"] = "1";
+  }
+});
+
 program.parse();

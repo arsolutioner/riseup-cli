@@ -284,5 +284,5 @@ export interface SessionData {
 export interface StoredSession {
   cookies: string;
   commitHash: string;
-  savedAt: string;
+  savedAt?: string;
 }
