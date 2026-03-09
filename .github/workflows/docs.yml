@@ -27,7 +27,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
 
       - name: Build docs
         run: npx vitepress build docs
