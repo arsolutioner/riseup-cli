@@ -9,6 +9,7 @@
 Query your spending, income, balances, and more — straight from the terminal.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/v/riseup-cli?color=CB3837&logo=npm&logoColor=white)](https://www.npmjs.com/package/riseup-cli)
 [![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Playwright](https://img.shields.io/badge/Playwright-Auth-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev)
@@ -16,7 +17,7 @@ Query your spending, income, balances, and more — straight from the terminal.
 
 <br>
 
-[Installation](#installation) · [Commands](#commands) · [Claude Code Skill](#claude-code-skill) · [Contributing](#contributing)
+[Installation](#installation) · [Commands](#commands) · [Claude Code Skill](#claude-code-skill) · [Docs](https://arsolutioner.github.io/riseup-cli/) · [Contributing](#contributing)
 
 </div>
 
@@ -44,6 +45,12 @@ Query your spending, income, balances, and more — straight from the terminal.
 | Google Chrome | Latest |
 
 ## Installation
+
+```bash
+npm install -g riseup-cli
+```
+
+Or install from GitHub:
 
 ```bash
 npm install -g github:arsolutioner/riseup-cli

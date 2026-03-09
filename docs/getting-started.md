@@ -12,6 +12,12 @@
 ## Installation
 
 ```bash
+npm install -g riseup-cli
+```
+
+Or install from GitHub:
+
+```bash
 npm install -g github:arsolutioner/riseup-cli
 ```
 
