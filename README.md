@@ -1,23 +1,53 @@
+<div align="center">
+
 # riseup-cli
 
-Unofficial CLI for [RiseUp](https://input.riseup.co.il) personal finance — query your spending, income, balances, and more from the terminal.
+**Unofficial CLI for [RiseUp](https://input.riseup.co.il) personal finance**
 
-RiseUp is an Israeli personal finance app with no public API. This tool reverse-engineers the internal API so you can access your own financial data programmatically.
+Query your spending, income, balances, and more — straight from the terminal.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Playwright](https://img.shields.io/badge/Playwright-Auth-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-D97706?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+
+<br>
+
+[Installation](#installation) · [Commands](#commands) · [Claude Code Skill](#claude-code-skill) · [Contributing](#contributing)
+
+</div>
+
+---
+
+> [!NOTE]
+> RiseUp is an Israeli personal finance app with no public API. This tool reverse-engineers the internal API so you can access **your own** financial data programmatically.
+
+## Features
+
+- **Spending breakdown** — by category, merchant, or payment source
+- **Income tracking** — salary, benefits, and all income sources
+- **Transaction search** — filter by merchant, category, amount, type
+- **Bank balances** — current balance across all connected accounts
+- **Credit card debt** — debt per card at a glance
+- **Trends** — month-over-month income vs. expenses comparison
+- **Claude Code skill** — ask Claude about your finances in natural language
+- **JSON output** — pipe to jq, scripts, or any tool
 
 ## Requirements
 
-- Node.js 22+
-- Google Chrome (for browser-based login)
+| Requirement | Version |
+|-------------|---------|
+| Node.js | 22+ |
+| Google Chrome | Latest |
 
 ## Installation
-
-Install from GitHub:
 
 ```bash
 npm install -g github:arsolutioner/riseup-cli
 ```
 
-After installation, install the Playwright browser dependency:
+Then install the browser dependency:
 
 ```bash
 npx playwright install chromium
@@ -25,19 +55,16 @@ npx playwright install chromium
 
 ## Authentication
 
-RiseUp uses Google OAuth for login. The CLI opens a real Chrome window so you can sign in manually:
+RiseUp uses Google OAuth. The CLI opens a real Chrome window so you can sign in manually — no passwords are stored or transmitted by this tool.
 
 ```bash
-riseup login
+riseup login     # Opens Chrome, sign in, session saved
+riseup status    # Check login status and account info
+riseup logout    # Clear session
 ```
 
-This saves your session cookies to `~/.config/riseup-cli/session.json` (chmod 0600). The browser uses a persistent profile with automation detection disabled so Google OAuth works normally.
-
-Check your login status:
-
-```bash
-riseup status
-```
+> [!TIP]
+> Sessions are stored at `~/.config/riseup-cli/session.json` with `chmod 0600`. The browser uses a persistent profile with automation detection disabled so Google OAuth works normally.
 
 ## Commands
 
@@ -79,66 +106,88 @@ riseup debt       # Credit card debt
 ### Trends
 
 ```bash
-riseup trends              # 3-month comparison
+riseup trends              # 3-month comparison (income vs expenses vs net)
 riseup trends 6            # 6-month comparison
-riseup trends --by category # Breakdown by category
+riseup trends --by category # Breakdown by category over time
 ```
 
-### Other
+### More
 
 ```bash
-riseup plans                  # Savings goals
+riseup plans                  # Savings goals and progress
 riseup insights               # AI-generated financial insights
-riseup account banks          # Connected banks & cards
+riseup account banks          # Connected banks and cards
 riseup account subscription   # Subscription details
 ```
 
 ### Global Options
 
-```bash
-riseup spending --json      # JSON output (for scripting)
-riseup spending --no-color  # Disable colors
-```
+| Flag | Description |
+|------|-------------|
+| `--json` | Output as JSON (for scripting and piping) |
+| `--no-color` | Disable colored output |
 
 ### Month Format
 
-Commands that accept a month argument support:
+Commands that accept a `[month]` argument support:
 
-- `current` — current budget month (default)
-- `prev` — previous month
-- `-1`, `-2`, `-3` — relative months
-- `2026-02` — specific year-month
-
-## Session Management
-
-```bash
-riseup login    # Open browser, authenticate, save session
-riseup logout   # Clear saved session
-riseup status   # Show login info and account details
-```
-
-Sessions are stored at `~/.config/riseup-cli/session.json` with restricted permissions. If your session expires, run `riseup login` again.
+| Format | Example | Description |
+|--------|---------|-------------|
+| `current` | `riseup spending current` | Current budget month (default) |
+| `prev` | `riseup spending prev` | Previous month |
+| `-N` | `riseup spending -2` | N months back |
+| `YYYY-MM` | `riseup spending 2026-01` | Specific month |
 
 ## Claude Code Skill
 
-riseup-cli ships with a [Claude Code](https://claude.com/claude-code) skill so Claude can query your finances directly. Install it with:
+riseup-cli ships with a [Claude Code](https://claude.com/claude-code) skill so Claude can query your finances directly using natural language.
 
 ```bash
-riseup skill install
+riseup skill install       # Install the skill
 ```
 
-Then ask Claude things like "how much did I spend this month?" or "what are my subscriptions?" and it will use the CLI automatically.
+Then just ask Claude:
+
+- *"How much did I spend this month?"*
+- *"What are my subscriptions?"*
+- *"Show my salary for the last 3 months"*
+- *"Am I saving money?"*
+- *"How much did I spend on groceries?"*
 
 ```bash
-riseup skill status      # Check if skill is installed
-riseup skill uninstall   # Remove the skill
-riseup skill show        # Display skill file content
+riseup skill status        # Check if installed
+riseup skill uninstall     # Remove the skill
+riseup skill show          # Display skill content
+```
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Runtime | Node.js 22+ (native fetch, ESM) |
+| Language | TypeScript |
+| CLI Framework | Commander.js |
+| Output | Chalk + cli-table3 |
+| Auth | Playwright (headed Chrome) |
+| Build | tsup |
+
+## Contributing
+
+Contributions are welcome! This project is built with TypeScript and uses tsup for building.
+
+```bash
+git clone https://github.com/arsolutioner/riseup-cli.git
+cd riseup-cli
+npm install
+npm run build
+npm run dev -- spending    # Run in dev mode
 ```
 
 ## Disclaimer
 
-This is an unofficial tool and is not affiliated with or endorsed by RiseUp. Use at your own risk. The internal API may change at any time.
+> [!WARNING]
+> This is an unofficial tool and is not affiliated with or endorsed by RiseUp. Use at your own risk. The internal API may change at any time.
 
 ## License
 
-MIT
+[MIT](LICENSE)
