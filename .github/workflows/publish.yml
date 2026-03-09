@@ -14,10 +14,10 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - run: npm ci --ignore-scripts
-
-      - name: Install Playwright Chromium
-        run: npx playwright install chromium
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
 
       - run: npm run build
 
