@@ -8,6 +8,7 @@ import { trendsAction } from "./commands/trends.js";
 import { plansAction } from "./commands/plans.js";
 import { insightsAction } from "./commands/insights.js";
 import { banksAction, subscriptionAction } from "./commands/account.js";
+import { skillInstallAction, skillStatusAction, skillUninstallAction, skillShowAction } from "./commands/skill.js";
 
 const program = new Command();
 
@@ -102,6 +103,31 @@ accountCmd
   .command("subscription")
   .description("Show subscription details")
   .action(subscriptionAction);
+
+// Skill commands
+const skillCmd = program
+  .command("skill")
+  .description("Manage Claude Code skill");
+
+skillCmd
+  .command("install")
+  .description("Install RiseUp skill for Claude Code")
+  .action(skillInstallAction);
+
+skillCmd
+  .command("status")
+  .description("Check skill installation status")
+  .action(skillStatusAction);
+
+skillCmd
+  .command("uninstall")
+  .description("Remove skill from Claude Code")
+  .action(skillUninstallAction);
+
+skillCmd
+  .command("show")
+  .description("Display skill file content")
+  .action(skillShowAction);
 
 program.hook("preAction", (thisCommand) => {
   const opts = thisCommand.optsWithGlobals();

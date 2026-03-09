@@ -10,7 +10,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp -r src/data dist/data",
     "dev": "tsx src/cli.ts",
     "test": "vitest"
   },

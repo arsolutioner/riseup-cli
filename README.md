@@ -123,6 +123,22 @@ riseup status   # Show login info and account details
 
 Sessions are stored at `~/.config/riseup-cli/session.json` with restricted permissions. If your session expires, run `riseup login` again.
 
+## Claude Code Skill
+
+riseup-cli ships with a [Claude Code](https://claude.com/claude-code) skill so Claude can query your finances directly. Install it with:
+
+```bash
+riseup skill install
+```
+
+Then ask Claude things like "how much did I spend this month?" or "what are my subscriptions?" and it will use the CLI automatically.
+
+```bash
+riseup skill status      # Check if skill is installed
+riseup skill uninstall   # Remove the skill
+riseup skill show        # Display skill file content
+```
+
 ## Disclaimer
 
 This is an unofficial tool and is not affiliated with or endorsed by RiseUp. Use at your own risk. The internal API may change at any time.
