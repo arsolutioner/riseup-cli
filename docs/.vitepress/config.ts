@@ -15,6 +15,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/getting-started' },
       { text: 'Commands', link: '/commands' },
+      { text: 'API Reference', link: '/api' },
       { text: 'Claude Code Skill', link: '/claude-code-skill' },
     ],
 
@@ -24,6 +25,7 @@ export default defineConfig({
         items: [
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Commands', link: '/commands' },
+          { text: 'API Reference', link: '/api' },
           { text: 'Claude Code Skill', link: '/claude-code-skill' },
           { text: 'Contributing', link: '/contributing' },
         ],
