@@ -85,12 +85,12 @@ export class RiseUpClient {
 
   /** Check if the session is still authenticated. Returns "OK" on success. */
   async isLoggedIn(): Promise<string> {
-    return this.http.get<string>("/api/logged-in/");
+    return this.http.getText("/api/logged-in/");
   }
 
   /** Fetch the current month's budget. */
   async getCurrentBudget(): Promise<Budget> {
-    return this.http.get<Budget>("/api/budget/current");
+    return this.http.getJson<Budget>("/api/budget/current");
   }
 
   /**
@@ -99,61 +99,61 @@ export class RiseUpClient {
    * @param count number of months to fetch (default 1)
    */
   async getBudgets(date: string, count = 1): Promise<Budget[]> {
-    return this.http.get<Budget[]>(`/api/budget/${date}/${count}`);
+    return this.http.getJson<Budget[]>(`/api/budget/${date}/${count}`);
   }
 
   /** Get the oldest budget date the user has (e.g. "2025-06"). */
   async getOldestBudgetDate(): Promise<string> {
-    return this.http.get<string>("/api/budget/oldest");
+    return this.http.getText("/api/budget/oldest");
   }
 
   /** Get current balances across all connected accounts. */
   async getBalances(): Promise<Balance[]> {
-    return this.http.get<Balance[]>("/api/current-balance");
+    return this.http.getJson<Balance[]>("/api/current-balance");
   }
 
   /** Get outstanding credit-card debt for each card. */
   async getCreditCardDebt(): Promise<CreditCardDebt[]> {
-    return this.http.get<CreditCardDebt[]>("/api/current-credit-card-debt");
+    return this.http.getJson<CreditCardDebt[]>("/api/current-credit-card-debt");
   }
 
   /** Get all financial plans. */
   async getPlans(): Promise<Plan[]> {
-    return this.http.get<Plan[]>("/api/plans");
+    return this.http.getJson<Plan[]>("/api/plans");
   }
 
   /** Get all insights (tips, alerts). */
   async getInsights(): Promise<Insight[]> {
-    return this.http.get<Insight[]>("/api/insights/all");
+    return this.http.getJson<Insight[]>("/api/insights/all");
   }
 
   /** Get connected credential (bank/card) settings. */
   async getCredentialsSettings(): Promise<CredentialsSettings> {
-    return this.http.get<CredentialsSettings>("/api/credentials-settings");
+    return this.http.getJson<CredentialsSettings>("/api/credentials-settings");
   }
 
   /** Get billing subscription details. */
   async getSubscription(): Promise<Subscription> {
-    return this.http.get<Subscription>("/api/subscription");
+    return this.http.getJson<Subscription>("/api/subscription");
   }
 
   /** Get the day-of-month when cashflow resets. */
   async getCashflowStartDay(): Promise<{ cashflowStartDay: number }> {
-    return this.http.get<{ cashflowStartDay: number }>(
+    return this.http.getJson<{ cashflowStartDay: number }>(
       "/api/cashflow-start-day",
     );
   }
 
   /** Get simplified subscription state. */
   async getSubscriptionState(): Promise<SubscriptionState> {
-    return this.http.get<SubscriptionState>(
+    return this.http.getJson<SubscriptionState>(
       "/api/subscription-state-simplified",
     );
   }
 
   /** Get session/customer data. */
   async getSessionData(): Promise<SessionData> {
-    return this.http.get<SessionData>(
+    return this.http.getJson<SessionData>(
       "/api/restricted-customer/session-data",
     );
   }

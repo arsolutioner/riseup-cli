@@ -23,20 +23,31 @@ export class HttpClient {
   }
 
   /**
-   * Perform a GET request against the RiseUp API.
+   * Perform a GET request expecting a JSON response.
    *
    * @param path  API path relative to the base URL, e.g. "/api/budget/current"
-   * @returns     Parsed JSON body (or raw text for plain-text endpoints).
+   * @returns     Parsed JSON body typed as T.
+   * @throws {ApiError} if the response content-type is not JSON.
    */
-  async get<T = unknown>(path: string): Promise<T> {
-    return this.request<T>(path, "GET");
+  async getJson<T = unknown>(path: string): Promise<T> {
+    return this.request<T>(path, "GET", undefined, "json");
+  }
+
+  /**
+   * Perform a GET request expecting a plain-text response.
+   *
+   * @param path  API path relative to the base URL, e.g. "/api/logged-in/"
+   * @returns     Raw response text.
+   */
+  async getText(path: string): Promise<string> {
+    return this.request<string>(path, "GET", undefined, "text");
   }
 
   /**
    * Perform a POST request against the RiseUp API.
    */
   async post<T = unknown>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>(path, "POST", body);
+    return this.request<T>(path, "POST", body, "json");
   }
 
   // ── internal ────────────────────────────────
@@ -45,6 +56,7 @@ export class HttpClient {
     path: string,
     method: string,
     body?: unknown,
+    expect: "json" | "text" = "json",
   ): Promise<T> {
     const url = `${this.baseUrl}${path}`;
     const headers = await this.buildHeaders();
@@ -83,11 +95,22 @@ export class HttpClient {
       );
     }
 
-    // Some endpoints return plain text (e.g. /api/logged-in/ returns "OK")
+    // Parse response body according to the expected format.
     const contentType = response.headers.get("content-type") ?? "";
-    if (contentType.includes("application/json")) {
+
+    if (expect === "json") {
+      if (!contentType.includes("application/json")) {
+        const text = await response.text().catch(() => "");
+        throw new ApiError(
+          `Expected JSON response for ${method} ${path} but got content-type "${contentType}": ${text}`,
+          response.status,
+          path,
+        );
+      }
       return (await response.json()) as T;
     }
+
+    // expect === "text"
     return (await response.text()) as T;
   }
 

@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, unlink, chmod } from "node:fs/promises";
+import { mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { dirname } from "node:path";
 import type { StoredSession } from "../client/types.js";
 import { getSessionPath, DEFAULT_COMMIT_HASH } from "../utils/config.js";
@@ -30,15 +30,33 @@ export class SessionManager {
    * exist or cannot be parsed.
    */
   async load(): Promise<StoredSession | null> {
+    let raw: string;
     try {
-      const raw = await readFile(this.path, "utf-8");
-      const data = JSON.parse(raw) as StoredSession;
-      this.cached = data;
-      return data;
-    } catch {
-      this.cached = null;
-      return null;
+      raw = await readFile(this.path, "utf-8");
+    } catch (err: unknown) {
+      if (err instanceof Error && "code" in err && err.code === "ENOENT") {
+        this.cached = null;
+        return null;
+      }
+      throw err;
     }
+
+    const data: unknown = JSON.parse(raw);
+
+    if (
+      typeof data !== "object" ||
+      data === null ||
+      typeof (data as Record<string, unknown>)["cookies"] !== "string" ||
+      typeof (data as Record<string, unknown>)["commitHash"] !== "string"
+    ) {
+      throw new SyntaxError(
+        `Invalid session file at ${this.path}: expected { cookies: string, commitHash: string }`,
+      );
+    }
+
+    const session = data as StoredSession;
+    this.cached = session;
+    return session;
   }
 
   /**
@@ -47,8 +65,10 @@ export class SessionManager {
    */
   async save(session: StoredSession): Promise<void> {
     await mkdir(dirname(this.path), { recursive: true });
-    await writeFile(this.path, JSON.stringify(session, null, 2), "utf-8");
-    await chmod(this.path, 0o600);
+    await writeFile(this.path, JSON.stringify(session, null, 2), {
+      encoding: "utf-8",
+      mode: 0o600,
+    });
     this.cached = session;
   }
 
