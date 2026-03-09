@@ -5,6 +5,10 @@ import { spendingAction } from "./commands/spending.js";
 import { incomeAction } from "./commands/income.js";
 import { transactionsAction } from "./commands/transactions.js";
 import { balanceAction, debtAction } from "./commands/balance.js";
+import { trendsAction } from "./commands/trends.js";
+import { plansAction } from "./commands/plans.js";
+import { insightsAction } from "./commands/insights.js";
+import { banksAction, subscriptionAction } from "./commands/account.js";
 
 const program = new Command();
 
@@ -69,5 +73,35 @@ program
   .command("debt")
   .description("Show credit card debt")
   .action(debtAction);
+
+program
+  .command("trends [months]")
+  .description("Month-over-month comparison")
+  .option("--by <dimension>", "Breakdown level: total or category", "total")
+  .action(trendsAction);
+
+program
+  .command("plans")
+  .description("Show savings plans")
+  .action(plansAction);
+
+program
+  .command("insights")
+  .description("Show financial insights")
+  .action(insightsAction);
+
+const accountCmd = program
+  .command("account")
+  .description("Account settings");
+
+accountCmd
+  .command("banks")
+  .description("Show connected banks/cards")
+  .action(banksAction);
+
+accountCmd
+  .command("subscription")
+  .description("Show subscription details")
+  .action(subscriptionAction);
 
 program.parse();
