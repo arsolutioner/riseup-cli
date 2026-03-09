@@ -11,14 +11,10 @@ RiseUp is an Israeli personal finance app with no public API. This tool reverse-
 
 ## Installation
 
-```bash
-npm install -g riseup-cli
-```
-
-Or run directly with npx:
+Install from GitHub:
 
 ```bash
-npx riseup-cli login
+npm install -g github:arsolutioner/riseup-cli
 ```
 
 After installation, install the Playwright browser dependency:
