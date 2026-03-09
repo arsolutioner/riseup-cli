@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="logo.png" alt="riseup-cli" width="320">
+<img src="logo.png" alt="riseup-cli" width="200">
 
 # riseup-cli
 
