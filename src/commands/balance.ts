@@ -40,7 +40,7 @@ export async function balanceAction(
 
     const total = balances.reduce((sum, b) => sum + b.balance, 0);
     console.log(chalk.bold(`\nTotal: ${formatNIS(total)}`));
-  });
+  }, { json });
 }
 
 /**
@@ -72,5 +72,5 @@ export async function debtAction(
 
     const total = debts.reduce((sum, d) => sum + d.amount, 0);
     console.log(chalk.bold(`\nTotal: ${formatNIS(total)}`));
-  });
+  }, { json });
 }

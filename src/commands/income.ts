@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import type { Command } from "commander";
-import type { Transaction } from "../client/types.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
 import { withClient } from "./helpers.js";
+import { fetchBudgetTransactions } from "./budget-helpers.js";
 
 // ── Action ───────────────────────────────────
 
@@ -21,23 +21,11 @@ export async function incomeAction(
   const date = parseMonth(month);
 
   await withClient(async (client) => {
-    const budgets = await client.budget.get(date, 1);
-    if (budgets.length === 0) {
-      console.error(chalk.yellow(`No budget found for ${date}.`));
-      process.exitCode = 1;
-      return;
-    }
-    const budget = budgets[0];
+    const result = await fetchBudgetTransactions(client, date);
+    if (!result) return;
 
-    // Collect all income transactions from all envelopes.
-    const allTransactions: Transaction[] = [];
-    for (const envelope of budget.envelopes) {
-      for (const tx of envelope.actuals) {
-        if (tx.isIncome) {
-          allTransactions.push(tx);
-        }
-      }
-    }
+    // Filter to income transactions only.
+    const allTransactions = result.transactions.filter((tx) => tx.isIncome);
 
     // Apply --salary-only filter.
     const filtered = salaryOnly
@@ -85,5 +73,5 @@ export async function incomeAction(
       0,
     );
     console.log(chalk.bold(`\nTotal: ${formatNIS(total)}`));
-  });
+  }, { json });
 }

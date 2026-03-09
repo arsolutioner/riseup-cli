@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import { loginAction, logoutAction, statusAction } from "./commands/auth.js";
 import { spendingAction } from "./commands/spending.js";
 import { incomeAction } from "./commands/income.js";
@@ -55,8 +55,8 @@ program
   .option("--category <name>", "Filter by category")
   .option("--min <amount>", "Minimum amount")
   .option("--max <amount>", "Maximum amount")
-  .option("--income", "Only income transactions")
-  .option("--expenses", "Only expense transactions")
+  .addOption(new Option("--income", "Only income transactions").conflicts("expenses"))
+  .addOption(new Option("--expenses", "Only expense transactions").conflicts("income"))
   .option("--sort <field>", "Sort by: date or amount", "date")
   .action(transactionsAction);
 

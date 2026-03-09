@@ -1,3 +1,5 @@
+import { RiseUpError } from "./errors.js";
+
 /**
  * Parse flexible month arguments for CLI commands.
  *
@@ -31,9 +33,8 @@ export function parseMonth(input?: string): string {
     return input;
   }
 
-  throw new Error(
-    `Invalid month format "${input}". ` +
-      `Use "current", "prev", "-N", or "YYYY-MM".`,
+  throw new RiseUpError(
+    `Invalid month format "${input}". Use: "current", "prev", "-N", or "YYYY-MM"`,
   );
 }
 

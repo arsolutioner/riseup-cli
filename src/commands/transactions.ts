@@ -6,6 +6,7 @@ import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
 import { withClient } from "./helpers.js";
+import { fetchBudgetTransactions } from "./budget-helpers.js";
 
 // ── Action ───────────────────────────────────
 
@@ -27,21 +28,10 @@ export async function transactionsAction(
   const date = parseMonth(month);
 
   await withClient(async (client) => {
-    const budgets = await client.budget.get(date, 1);
-    if (budgets.length === 0) {
-      console.error(chalk.yellow(`No budget found for ${date}.`));
-      process.exitCode = 1;
-      return;
-    }
-    const budget = budgets[0];
+    const result = await fetchBudgetTransactions(client, date);
+    if (!result) return;
 
-    // Collect all transactions from all envelopes.
-    let transactions: Transaction[] = [];
-    for (const envelope of budget.envelopes) {
-      for (const tx of envelope.actuals) {
-        transactions.push(tx);
-      }
-    }
+    let transactions: Transaction[] = result.transactions;
 
     // Apply filters.
     if (incomeOnly) {
@@ -123,7 +113,7 @@ export async function transactionsAction(
     console.log(chalk.bold(`Transactions for ${date}`));
     printTable(table);
     console.log(chalk.dim(`${transactions.length} transactions`));
-  });
+  }, { json });
 }
 
 /**

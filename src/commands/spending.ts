@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import type { Command } from "commander";
-import type { Transaction } from "../client/types.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
 import { withClient } from "./helpers.js";
+import { fetchBudgetTransactions } from "./budget-helpers.js";
 
 // ── Types ────────────────────────────────────
 
@@ -31,24 +31,11 @@ export async function spendingAction(
   const date = parseMonth(month);
 
   await withClient(async (client) => {
-    const budgets = await client.budget.get(date, 1);
-    if (budgets.length === 0) {
-      console.error(chalk.yellow(`No budget found for ${date}.`));
-      process.exitCode = 1;
-      return;
-    }
-    const budget = budgets[0];
-
-    // Collect all transactions from all envelopes.
-    const allTransactions: Transaction[] = [];
-    for (const envelope of budget.envelopes) {
-      for (const tx of envelope.actuals) {
-        allTransactions.push(tx);
-      }
-    }
+    const result = await fetchBudgetTransactions(client, date);
+    if (!result) return;
 
     // Spending = expenses only (exclude income).
-    const expenses = allTransactions.filter((tx) => !tx.isIncome);
+    const expenses = result.transactions.filter((tx) => !tx.isIncome);
 
     // Apply --category filter.
     const filtered = category
@@ -111,5 +98,5 @@ export async function spendingAction(
 
     const grandTotal = sorted.reduce((sum, g) => sum + g.total, 0);
     console.log(chalk.bold(`\nTotal: ${formatNIS(grandTotal)}`));
-  });
+  }, { json });
 }
