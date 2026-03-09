@@ -13,7 +13,7 @@
     "tsup.config.ts"
   ],
   "scripts": {
-    "build": "tsup && cp -r src/data dist/data",
+    "build": "tsup && node -e \"require('fs').cpSync('src/data','dist/data',{recursive:true})\"",
     "prepare": "npm run build",
     "dev": "tsx src/cli.ts",
     "test": "vitest",
