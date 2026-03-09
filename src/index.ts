@@ -1,13 +1,34 @@
-// Re-export public API for convenience
-export { RiseUpClient } from "./client/RiseUpClient.js";
-export type { RiseUpClientOptions } from "./client/RiseUpClient.js";
-export { SessionManager } from "./auth/SessionManager.js";
-export { HttpClient } from "./client/http.js";
-export {
-  RiseUpError,
-  AuthError,
-  ApiError,
-  NetworkError,
-} from "./utils/errors.js";
-export * from "./client/types.js";
-export { BASE_URL, DEFAULT_COMMIT_HASH, getConfigDir, getSessionPath } from "./utils/config.js";
+#!/usr/bin/env node
+import { Command } from "commander";
+import { loginAction, logoutAction, statusAction } from "./commands/auth.js";
+
+const program = new Command();
+
+program
+  .name("riseup")
+  .description("Unofficial RiseUp Finance CLI")
+  .version("0.1.0");
+
+// Global options
+program.option("--json", "Output as JSON");
+program.option("--no-color", "Disable colors");
+
+// Auth commands
+program
+  .command("login")
+  .description("Login via browser")
+  .action(loginAction);
+
+program
+  .command("logout")
+  .description("Clear session")
+  .action(logoutAction);
+
+program
+  .command("status")
+  .description("Show login & account info")
+  .action(statusAction);
+
+// Placeholder for future commands (Phase 3+)
+
+program.parse();
