@@ -1,34 +1,52 @@
-#!/usr/bin/env node
-import { Command } from "commander";
-import { loginAction, logoutAction, statusAction } from "./commands/auth.js";
+// ── Public API barrel exports ────────────────
 
-const program = new Command();
+// Client
+export { RiseUpClient } from "./client/RiseUpClient.js";
+export type { RiseUpClientOptions } from "./client/RiseUpClient.js";
+export { HttpClient } from "./client/http.js";
+export type { HttpClientOptions } from "./client/http.js";
 
-program
-  .name("riseup")
-  .description("Unofficial RiseUp Finance CLI")
-  .version("0.1.0");
+// Types
+export type {
+  Transaction,
+  TrackingCategory,
+  MatchingPredicate,
+  AiEnrichment,
+  Envelope,
+  EnvelopeDetails,
+  Budget,
+  TrackingCategoryMetadata,
+  Balance,
+  CreditCardDebt,
+  Subscription,
+  SubscriptionState,
+  CredentialsSettings,
+  CredentialConfig,
+  CredentialAccount,
+  Insight,
+  Plan,
+  SessionData,
+  StoredSession,
+} from "./client/types.js";
 
-// Global options
-program.option("--json", "Output as JSON");
-program.option("--no-color", "Disable colors");
+// Auth
+export { SessionManager } from "./auth/SessionManager.js";
 
-// Auth commands
-program
-  .command("login")
-  .description("Login via browser")
-  .action(loginAction);
+// Errors
+export {
+  RiseUpError,
+  AuthError,
+  ApiError,
+  NetworkError,
+} from "./utils/errors.js";
 
-program
-  .command("logout")
-  .description("Clear session")
-  .action(logoutAction);
+// Config utilities
+export {
+  BASE_URL,
+  DEFAULT_COMMIT_HASH,
+  getConfigDir,
+  getSessionPath,
+} from "./utils/config.js";
 
-program
-  .command("status")
-  .description("Show login & account info")
-  .action(statusAction);
-
-// Placeholder for future commands (Phase 3+)
-
-program.parse();
+// Date utilities
+export { parseMonth } from "./utils/dates.js";

@@ -47,6 +47,7 @@ function formatMonth(date: Date): string {
 /** Return "YYYY-MM" for today's date offset by `delta` months. */
 function offsetMonth(delta: number): string {
   const now = new Date();
+  now.setDate(1);
   now.setMonth(now.getMonth() + delta);
   return formatMonth(now);
 }

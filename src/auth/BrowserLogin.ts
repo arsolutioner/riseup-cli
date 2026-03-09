@@ -40,7 +40,7 @@ export async function browserLogin(): Promise<{
     );
 
     // Extract cookies from the browser context.
-    const playwrightCookies = await context.cookies();
+    const playwrightCookies = await context.cookies("https://input.riseup.co.il");
     const cookieString = playwrightCookies
       .map((c) => `${c.name}=${c.value}`)
       .join("; ");
@@ -75,6 +75,6 @@ export async function browserLogin(): Promise<{
 
     return { cookies: cookieString, commitHash };
   } finally {
-    await browser.close();
+    await browser.close().catch(() => {});
   }
 }

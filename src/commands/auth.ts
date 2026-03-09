@@ -13,6 +13,10 @@ import { AuthError, RiseUpError } from "../utils/errors.js";
  * - Loads an existing session (or prints an error if none exists).
  * - Wires up SessionManager → HttpClient → RiseUpClient.
  * - Catches and pretty-prints known error types.
+ *
+ * NOTE: This is a terminal action — errors are printed and the process
+ * exits with code 1. Callers should not add additional error handling
+ * around withClient calls.
  */
 async function withClient(
   fn: (client: RiseUpClient) => Promise<void>,
@@ -81,11 +85,22 @@ export async function loginAction(): Promise<void> {
   }
 
   const session = new SessionManager();
-  await session.save({
-    cookies: result.cookies,
-    commitHash: result.commitHash,
-    savedAt: new Date().toISOString(),
-  });
+  try {
+    await session.save({
+      cookies: result.cookies,
+      commitHash: result.commitHash,
+      savedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error(
+      chalk.red(
+        "Failed to save session: " +
+          (err instanceof Error ? err.message : String(err)),
+      ),
+    );
+    process.exitCode = 1;
+    return;
+  }
 
   // Quick verification.
   const client = new RiseUpClient({ sessionManager: session });
