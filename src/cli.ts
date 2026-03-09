@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { Command, Option } from "commander";
 import { loginAction, logoutAction, statusAction } from "./commands/auth.js";
 import { spendingAction } from "./commands/spending.js";

@@ -13,7 +13,7 @@ import { withClient } from "./helpers.js";
 export async function loginAction(): Promise<void> {
   console.log(
     chalk.cyan(
-      "Opening browser for login… Complete the sign-in in the Chromium window.",
+      "Opening browser for login… Complete the sign-in in the browser window.",
     ),
   );
 

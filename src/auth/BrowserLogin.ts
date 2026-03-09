@@ -1,13 +1,16 @@
+import { join } from "node:path";
 import { chromium } from "playwright";
+import { getConfigDir } from "../utils/config.js";
 import { DEFAULT_COMMIT_HASH } from "../utils/config.js";
 
 /**
- * Launch a headed Chromium browser so the user can log in to RiseUp
+ * Launch a persistent Chromium browser so the user can log in to RiseUp
  * interactively (Google OAuth, SMS, etc.).
  *
- * The function waits for the URL to contain `/home` (indicating a
- * successful login), then extracts all cookies and an optional commit
- * hash from the page before closing the browser.
+ * Uses `launchPersistentContext` with automation flags disabled so that
+ * Google OAuth does not block the browser as "insecure".
+ *
+ * Automatically detects successful login when the URL contains `/home`.
  *
  * @returns cookies as a serialized Cookie header string, plus the
  *          commit hash extracted from the app JS bundle.
@@ -16,17 +19,28 @@ export async function browserLogin(): Promise<{
   cookies: string;
   commitHash: string;
 }> {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-  const page = await context.newPage();
+  const browserProfileDir = join(getConfigDir(), "browser-profile");
+
+  // Use a persistent browser context so Google OAuth doesn't flag us.
+  // - ignoreDefaultArgs removes --enable-automation (Playwright's default)
+  // - --disable-blink-features=AutomationControlled prevents navigator.webdriver = true
+  const context = await chromium.launchPersistentContext(browserProfileDir, {
+    headless: false,
+    channel: "chrome",
+    ignoreDefaultArgs: ["--enable-automation"],
+    args: ["--disable-blink-features=AutomationControlled"],
+  });
+
+  const page = context.pages[0] ?? await context.newPage();
 
   try {
-    // Navigate to the login page.
-    await page.goto("https://input.riseup.co.il/login?redirectTo=home");
+    await page.goto("https://input.riseup.co.il/login?redirectTo=home", {
+      timeout: 60_000,
+      waitUntil: "domcontentloaded",
+    });
 
     // Wait for the user to complete the login flow.
     // Successful login redirects to a URL containing "/home".
-    // We exclude URLs that still contain "/login" or the OAuth domain.
     await page.waitForURL(
       (url) => {
         const href = url.toString();
@@ -36,7 +50,7 @@ export async function browserLogin(): Promise<{
           !href.includes("account.app.letsriseup")
         );
       },
-      { timeout: 5 * 60 * 1000 }, // 5 minutes for user to complete login
+      { timeout: 5 * 60 * 1000 },
     );
 
     // Extract cookies from the browser context.
@@ -45,9 +59,11 @@ export async function browserLogin(): Promise<{
       .map((c) => `${c.name}=${c.value}`)
       .join("; ");
 
+    if (!cookieString) {
+      throw new Error("No cookies found — login may not have completed.");
+    }
+
     // Try to extract the commit hash from the app JS bundle filename.
-    // The bundle URL typically looks like: /_next/static/<hash>/_buildManifest.js
-    // or the app chunk contains the hash in its path.
     let commitHash = DEFAULT_COMMIT_HASH;
     try {
       const extracted: string | null = await page.evaluate(`
@@ -75,6 +91,6 @@ export async function browserLogin(): Promise<{
 
     return { cookies: cookieString, commitHash };
   } finally {
-    await browser.close().catch(() => {});
+    await context.close().catch(() => {});
   }
 }
