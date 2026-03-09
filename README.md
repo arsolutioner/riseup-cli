@@ -2,7 +2,7 @@
 
 # riseup-cli
 
-**Unofficial CLI for [RiseUp](https://input.riseup.co.il) personal finance**
+**Unofficial CLI for [RiseUp](https://www.riseup.co.il) personal finance**
 
 Query your spending, income, balances, and more — straight from the terminal.
 
@@ -21,7 +21,7 @@ Query your spending, income, balances, and more — straight from the terminal.
 ---
 
 > [!NOTE]
-> RiseUp is an Israeli personal finance app with no public API. This tool reverse-engineers the internal API so you can access **your own** financial data programmatically.
+> RiseUp is an Israeli personal finance app with no public API. This CLI was built by reverse-engineering the internal API that powers the RiseUp web app, so you can access your own financial data programmatically — from the terminal or through AI agents like Claude Code. All requests go directly from your machine to RiseUp's servers using your own session cookies. Nothing is proxied, stored, or sent anywhere else.
 
 ## Features
 

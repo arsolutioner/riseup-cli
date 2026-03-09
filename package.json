@@ -1,7 +1,7 @@
 {
   "name": "riseup-cli",
   "version": "0.1.0",
-  "description": "Unofficial CLI for RiseUp personal finance (input.riseup.co.il)",
+  "description": "Unofficial CLI for RiseUp personal finance (www.riseup.co.il)",
   "type": "module",
   "bin": {
     "riseup": "./dist/cli.js"
