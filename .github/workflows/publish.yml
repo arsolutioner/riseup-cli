@@ -15,9 +15,11 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
-        run: npm install --ignore-scripts
+        run: |
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --ignore-scripts
         env:
-          NODE_OPTIONS: --max-old-space-size=4096
+          NODE_OPTIONS: --max-old-space-size=8192
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
       - run: npm run build
 
