@@ -25,9 +25,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
-      - run: npm install vitepress
+      - name: Install VitePress
+        run: |
+          cd docs
+          npm init -y > /dev/null 2>&1
+          npm install vitepress
 
       - name: Build docs
         run: npx vitepress build docs

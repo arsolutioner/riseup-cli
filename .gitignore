@@ -26,3 +26,6 @@ browser-profile/
 # VitePress
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+docs/node_modules/
+docs/package.json
+docs/package-lock.json
