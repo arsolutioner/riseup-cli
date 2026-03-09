@@ -14,6 +14,7 @@ Query your spending, income, balances, and more — straight from the terminal.
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Playwright](https://img.shields.io/badge/Playwright-Auth-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-D97706?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Amram_Englander-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amram-englander)
 
 <br>
 
