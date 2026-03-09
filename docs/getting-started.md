@@ -27,6 +27,10 @@ Then install the browser dependency:
 npx playwright install chromium
 ```
 
+::: tip
+Both `riseup` and `riseup-cli` work as commands.
+:::
+
 ## Authentication
 
 RiseUp uses Google OAuth. The CLI opens a real Chrome window so you can sign in manually — no passwords are stored or transmitted by this tool.
