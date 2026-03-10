@@ -8,6 +8,7 @@ import { trendsAction } from "./commands/trends.js";
 import { plansAction } from "./commands/plans.js";
 import { insightsAction } from "./commands/insights.js";
 import { banksAction, subscriptionAction } from "./commands/account.js";
+import { progressAction } from "./commands/progress.js";
 import { skillInstallAction, skillStatusAction, skillUninstallAction, skillShowAction } from "./commands/skill.js";
 
 const program = new Command();
@@ -77,7 +78,7 @@ program
 program
   .command("trends [months]")
   .description("Month-over-month comparison")
-  .option("--by <dimension>", "Breakdown level: total or category", "total")
+  .option("--by <dimension>", "Breakdown: total, category, or breakdown", "total")
   .action(trendsAction);
 
 program
@@ -89,6 +90,11 @@ program
   .command("insights")
   .description("Show financial insights")
   .action(insightsAction);
+
+program
+  .command("progress")
+  .description("Show financial health & savings progress")
+  .action(progressAction);
 
 const accountCmd = program
   .command("account")

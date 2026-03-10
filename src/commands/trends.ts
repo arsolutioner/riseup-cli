@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import type { Command } from "commander";
-import type { Budget } from "../client/types.js";
+import type { Budget, CashflowTrends } from "../client/types.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
@@ -42,6 +42,12 @@ export async function trendsAction(
   }
 
   await withClient(async (client) => {
+    if (by === "breakdown") {
+      const trends = await client.hamster.cashflowTrends();
+      showBreakdown(trends, json);
+      return;
+    }
+
     // Fetch budgets for the last N months.
     // The start date is (numMonths - 1) months ago so that we include
     // the current month in the range.
@@ -164,5 +170,60 @@ function showByCategory(
   }
 
   console.log(chalk.bold("Monthly Trends (by Category)"));
+  printTable(table);
+}
+
+// ── By Breakdown (Fixed vs Variable) ────────
+
+interface BreakdownRow {
+  month: string;
+  fixed: number;
+  variable: number;
+  total: number;
+}
+
+function showBreakdown(
+  trends: CashflowTrends,
+  json: boolean,
+): void {
+  if (json) {
+    printJson(trends);
+    return;
+  }
+
+  // Aggregate fixed entries by month.
+  const fixedByMonth = new Map<string, number>();
+  for (const entry of trends.fixed) {
+    fixedByMonth.set(
+      entry.cashflowMonth,
+      (fixedByMonth.get(entry.cashflowMonth) ?? 0) + entry.amount,
+    );
+  }
+
+  // Collect all months from variable entries.
+  const rows: BreakdownRow[] = trends.variables.map((v) => {
+    const fixed = fixedByMonth.get(v.cashflowMonth) ?? 0;
+    return {
+      month: v.cashflowMonth,
+      fixed,
+      variable: v.amount,
+      total: fixed + v.amount,
+    };
+  });
+
+  const table = createTable({
+    head: ["Month", "Fixed", "Variable", "Total"],
+  });
+
+  for (const row of rows) {
+    table.push([
+      row.month,
+      formatNIS(row.fixed),
+      formatNIS(row.variable),
+      formatNIS(row.total),
+    ]);
+  }
+
+  console.log(chalk.bold("Monthly Trends (Fixed vs Variable)"));
   printTable(table);
 }

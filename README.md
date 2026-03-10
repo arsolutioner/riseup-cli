@@ -38,9 +38,10 @@ RiseUp is an Israeli personal finance app with no public API. This CLI was built
 - **Spending breakdown** — by category, merchant, or payment source
 - **Income tracking** — salary, benefits, and all income sources
 - **Transaction search** — filter by merchant, category, amount, type
-- **Bank balances** — current balance across all connected accounts
+- **Bank balances & investments** — balances, securities portfolio, savings, loans
 - **Credit card debt** — debt per card at a glance
-- **Trends** — month-over-month income vs. expenses comparison
+- **Trends** — month-over-month income vs. expenses, fixed vs. variable breakdown
+- **Financial progress** — savings recommendations and spending trend analysis
 - **Claude Code skill** — ask Claude about your finances in natural language
 - **JSON output** — pipe to jq, scripts, or any tool
 
@@ -118,7 +119,7 @@ riseup transactions --min 500 --max 2000     # Amount range
 ### Balances
 
 ```bash
-riseup balance    # Bank account balances
+riseup balance    # Bank balances + investment portfolio
 riseup debt       # Credit card debt
 ```
 
@@ -127,7 +128,14 @@ riseup debt       # Credit card debt
 ```bash
 riseup trends              # 3-month comparison (income vs expenses vs net)
 riseup trends 6            # 6-month comparison
-riseup trends --by category # Breakdown by category over time
+riseup trends --by category   # Breakdown by category over time
+riseup trends --by breakdown  # Fixed vs variable expenses
+```
+
+### Progress
+
+```bash
+riseup progress            # Financial health, savings recommendations
 ```
 
 ### More
@@ -135,7 +143,7 @@ riseup trends --by category # Breakdown by category over time
 ```bash
 riseup plans                  # Savings goals and progress
 riseup insights               # AI-generated financial insights
-riseup account banks          # Connected banks and cards
+riseup account banks          # Connected banks, status & last sync
 riseup account subscription   # Subscription details
 ```
 

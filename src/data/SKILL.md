@@ -31,6 +31,7 @@ Query your personal finance data from [RiseUp](https://input.riseup.co.il) (Isra
 - `riseup balance`
 - `riseup debt`
 - `riseup trends [months]` and all flags
+- `riseup progress`
 - `riseup plans`
 - `riseup insights`
 - `riseup account banks`
@@ -57,13 +58,15 @@ Query your personal finance data from [RiseUp](https://input.riseup.co.il) (Isra
 | Filter by category | `riseup transactions --category "רכב"` |
 | Expenses over ₪500 | `riseup transactions --expenses --min 500` |
 | Sort by amount | `riseup transactions --sort amount` |
-| Bank balance | `riseup balance` |
+| Bank balance & investments | `riseup balance` |
 | Credit card debt | `riseup debt` |
 | 6-month trend | `riseup trends 6` |
 | Trend by category | `riseup trends --by category` |
+| Fixed vs variable expenses | `riseup trends --by breakdown` |
+| Financial health & savings | `riseup progress` |
 | Savings plans | `riseup plans` |
 | AI insights | `riseup insights` |
-| Connected banks | `riseup account banks` |
+| Connected banks & status | `riseup account banks` |
 | Subscription details | `riseup account subscription` |
 | Login status | `riseup status` |
 
@@ -107,6 +110,30 @@ riseup spending --category "כלכלה"
 riseup trends 6
 ```
 Shows income vs expenses and net for each month.
+
+### "What are my investments worth?"
+```bash
+riseup balance
+```
+Shows bank balances plus investment portfolio (securities, savings accounts, loans, mortgages).
+
+### "How am I doing financially?"
+```bash
+riseup progress
+```
+Shows savings recommendations, positive months count, and spending trend analysis.
+
+### "What are my fixed vs variable expenses?"
+```bash
+riseup trends --by breakdown
+```
+Shows fixed and variable expenses per month over ~9 months.
+
+### "Are all my bank connections working?"
+```bash
+riseup account banks
+```
+Shows connection status, account numbers, and last sync time for each credential.
 
 ### "What's my biggest expense?"
 ```bash

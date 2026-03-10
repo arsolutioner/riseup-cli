@@ -279,6 +279,152 @@ export interface SessionData {
   onboardingStatus: string;
 }
 
+// ── Financial Summary (Investments) ──────────
+
+export interface FinancialSummary {
+  securities: SecurityAccount[];
+  savingsAccounts: SavingsAccount[];
+  loans: LoanAccount[];
+  mortgages: MortgageAccount[];
+}
+
+export interface SecurityAccount {
+  resourceId: string;
+  iban: string;
+  currency: string;
+  usage: string;
+  cashAccountType: string;
+  displayName: string;
+  sourceIdentifier: string;
+  balances: Array<{
+    balanceAmount: { amount: string; currency: string };
+    balanceType: string;
+    referenceDateTime: string;
+  }>;
+  positions: SecurityPosition[];
+  balanceAmount: { amount: string; currency: string };
+}
+
+export interface SecurityPosition {
+  unitsNumber: number;
+  details: string;
+  averageBuyingPrice: { currency: string; amount: string };
+  estimatedCurrentValue: {
+    evaluationDate: string;
+    amount: { currency: string; amount: string };
+  };
+  financialInstrument: {
+    isin: string;
+    name: string;
+    normalisedPrice: {
+      amount: { amount: string; currency: string };
+      priceDate: string;
+    };
+  };
+}
+
+export interface SavingsAccount {
+  [key: string]: unknown;
+}
+
+export interface LoanAccount {
+  [key: string]: unknown;
+}
+
+export interface MortgageAccount {
+  [key: string]: unknown;
+}
+
+// ── Cashflow Trends ─────────────────────────
+
+export interface CashflowTrends {
+  variables: CashflowTrendEntry[];
+  fixed: CashflowFixedEntry[];
+  income_fixed?: CashflowFixedEntry[];
+  income_variables?: CashflowTrendEntry[];
+}
+
+export interface CashflowTrendEntry {
+  cashflowMonth: string;
+  amount: number;
+}
+
+export interface CashflowFixedEntry {
+  cashflowMonth: string;
+  amount: number;
+  expense: string;
+}
+
+// ── Credential Info ─────────────────────────
+
+export interface CredentialInfo {
+  _id: string;
+  name: string;
+  status: string;
+  customerId: number;
+  credentialsId: string;
+  sourceName: string;
+  provider: string;
+  created: string;
+  __v: number;
+  openBankingConsentId?: string;
+  statusExtraData: Record<string, unknown>;
+  lastScrapedAt: string;
+}
+
+export interface CredentialAccountMapping {
+  _id: string;
+  customerId: number;
+  credentialsId: string;
+  accountNumberPiiIds: Array<{
+    _id: string;
+    accountNumberPiiId: string;
+    source: string;
+    sourceType: string;
+    isExcluded: boolean;
+    accountNickname: string;
+    accountNumberPiiValue?: string;
+    ibanPiiValue?: string;
+    scraperSourceAccountNumber?: string | null;
+  }>;
+  createdAt: string;
+  __v: number;
+}
+
+// ── Customer Progress ───────────────────────
+
+export interface CustomerProgress {
+  averageCashflows: number;
+  positiveCashflowsCount: number;
+  averageSavings: number;
+  totalSavings: number;
+  totalCashflowsAndSavingsSinceActivation: number;
+  topCategoryTrends: {
+    highestNegativeChangeCategory?: {
+      categoryName: string;
+      categoryId: string;
+      categoryIdHash: string;
+      topBusinessNames: Array<{
+        businessName: string;
+        transactionsSum: number;
+        transactionsCount: number;
+      }>;
+      quarterlyChangeAmount: number;
+      quarterlyChangePercentage: number;
+      lastQuarterAmount: number;
+      currentQuarterAmount: number;
+    };
+  };
+  progressState: {
+    progressStatus: string;
+    inTrial: boolean;
+    currentOshIsPositive: boolean;
+    hasRecentNegativeCashflows: boolean;
+    hasRecentSavingsTransaction: boolean;
+    monthlySavingsRecommendation: number;
+  };
+}
+
 // ── Stored session file shape ────────────────
 
 export interface StoredSession {

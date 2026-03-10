@@ -15,36 +15,67 @@ export async function banksAction(
   const json = Boolean(opts.json);
 
   await withClient(async (client) => {
-    const settings = await client.account.credentials();
-    const configs = settings.credentialsConfigurations ?? [];
+    const [creds, accounts] = await Promise.all([
+      client.account.credentialsInfo(),
+      client.account.credentialAccounts(),
+    ]);
+
+    // Build a lookup from credentialsId to account numbers.
+    const accountsByCredId = new Map<string, string[]>();
+    for (const mapping of accounts) {
+      const nums = mapping.accountNumberPiiIds
+        .filter((a) => !a.isExcluded && a.accountNumberPiiValue)
+        .map((a) => a.accountNumberPiiValue!);
+      accountsByCredId.set(mapping.credentialsId, nums);
+    }
 
     if (json) {
-      printJson(configs);
+      const enriched = creds.map((c) => ({
+        ...c,
+        accounts: accountsByCredId.get(c.credentialsId) ?? [],
+      }));
+      printJson(enriched);
       return;
     }
 
-    if (configs.length === 0) {
+    if (creds.length === 0) {
       console.log("No connected banks or cards.");
       return;
     }
 
     const table = createTable({
-      head: ["Bank", "Name", "Status", "Accounts", "Open Banking"],
+      head: ["Name", "Source", "Status", "Accounts", "Last Synced"],
     });
 
-    for (const cred of configs) {
+    for (const cred of creds) {
+      const nums = accountsByCredId.get(cred.credentialsId) ?? [];
+      const statusDisplay =
+        cred.status === "valid"
+          ? chalk.green("valid")
+          : chalk.red(cred.status);
+
       table.push([
-        cred.bankIdentifier,
         cred.name,
-        cred.status,
-        String(cred.accounts.length),
-        cred.isOBK ? chalk.green("Yes") : "No",
+        cred.sourceName,
+        statusDisplay,
+        nums.join(", ") || "-",
+        formatRelativeTime(cred.lastScrapedAt),
       ]);
     }
 
     console.log(chalk.bold("Connected Banks & Cards"));
     printTable(table);
   }, { json });
+}
+
+function formatRelativeTime(isoDate: string): string {
+  const diff = Date.now() - new Date(isoDate).getTime();
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }
 
 // ── Subscription Action ──────────────────────

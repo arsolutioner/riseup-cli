@@ -10,6 +10,11 @@ import type {
   Subscription,
   SubscriptionState,
   SessionData,
+  FinancialSummary,
+  CashflowTrends,
+  CredentialInfo,
+  CredentialAccountMapping,
+  CustomerProgress,
 } from "./types.js";
 
 export interface RiseUpClientOptions {
@@ -59,6 +64,9 @@ export class RiseUpClient {
     balances: () => this.getBalances(),
     creditCardDebt: () => this.getCreditCardDebt(),
     credentials: () => this.getCredentialsSettings(),
+    credentialsInfo: () => this.getCredentialsInfo(),
+    credentialAccounts: () => this.getCredentialAccounts(),
+    financialSummary: () => this.getFinancialSummary(),
     subscription: () => this.getSubscription(),
     subscriptionState: () => this.getSubscriptionState(),
     sessionData: () => this.getSessionData(),
@@ -77,6 +85,12 @@ export class RiseUpClient {
   /** Configuration. */
   config = {
     cashflowStartDay: () => this.getCashflowStartDay(),
+  };
+
+  /** Hamster analytics endpoints. */
+  hamster = {
+    cashflowTrends: () => this.getCashflowTrends(),
+    customerProgress: () => this.getCustomerProgress(),
   };
 
   // ═══════════════════════════════════════════
@@ -155,6 +169,37 @@ export class RiseUpClient {
   async getSessionData(): Promise<SessionData> {
     return this.http.getJson<SessionData>(
       "/api/restricted-customer/session-data",
+    );
+  }
+
+  /** Get investment portfolio, savings accounts, loans, and mortgages. */
+  async getFinancialSummary(): Promise<FinancialSummary> {
+    return this.http.getJson<FinancialSummary>(
+      "/api/aggregator/financial-summary",
+    );
+  }
+
+  /** Get detailed credential info with status and last scrape time. */
+  async getCredentialsInfo(): Promise<CredentialInfo[]> {
+    return this.http.getJson<CredentialInfo[]>("/api/credentials-info");
+  }
+
+  /** Get credential-to-account number mappings. */
+  async getCredentialAccounts(): Promise<CredentialAccountMapping[]> {
+    return this.http.getJson<CredentialAccountMapping[]>(
+      "/api/creds-to-accounts",
+    );
+  }
+
+  /** Get cashflow trends with fixed vs variable breakdown. */
+  async getCashflowTrends(): Promise<CashflowTrends> {
+    return this.http.getJson<CashflowTrends>("/api/hamster/cashflow-trends");
+  }
+
+  /** Get financial health metrics and savings progress. */
+  async getCustomerProgress(): Promise<CustomerProgress> {
+    return this.http.getJson<CustomerProgress>(
+      "/api/hamster/customer-progress",
     );
   }
 }
