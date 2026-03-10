@@ -175,29 +175,18 @@ riseup skill install       # Install the skill
 
 ### OpenClaw
 
-```bash
-npx clawhub@latest install riseup
-```
+Tell your OpenClaw agent:
 
-#### Headless / VPS setup
+> Install the riseup skill from https://github.com/arsolutioner/riseup-cli/releases/latest — download `riseup-skill.zip`, install `riseup-cli` via npm, and set it up. Here is my session file: `<paste contents of ~/.config/riseup-cli/session.json>`
 
-OpenClaw often runs on a VPS with no display. Login requires a browser, so authenticate on your local machine first and copy the session:
+To get your session, login locally first:
 
 ```bash
-# On your LOCAL machine (has a browser):
 npm install -g riseup-cli
 npx playwright install chromium
 riseup login
-
-# Copy session to VPS:
-scp ~/.config/riseup-cli/session.json user@your-vps:~/.config/riseup-cli/session.json
-
-# On the VPS:
-npm install -g riseup-cli
-riseup status    # Should show "Logged in ✓"
+cat ~/.config/riseup-cli/session.json   # Copy this output
 ```
-
-Sessions last ~30 days. Run `riseup status` to check remaining time. Re-login locally and copy the session again when it expires.
 
 ### Try it
 
