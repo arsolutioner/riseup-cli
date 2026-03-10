@@ -157,9 +157,9 @@ Commands that accept a `[month]` argument support:
 | `-N` | `riseup spending -2` | N months back |
 | `YYYY-MM` | `riseup spending 2026-01` | Specific month |
 
-## Claude Code and Claude Desktop Skill
+## AI Agent Skills
 
-riseup-cli ships with a skill that works with [Claude Code](https://claude.com/claude-code) and [Claude Desktop](https://claude.com/download) (Cowork) so Claude can query your finances directly using natural language.
+riseup-cli ships with a skill so AI agents can query your finances directly using natural language.
 
 ### Claude Code
 
@@ -173,9 +173,35 @@ riseup skill install       # Install the skill
 2. Go to **Settings > Customize > Skills > "+" > Upload** and select the ZIP
 3. Toggle the skill ON
 
+### OpenClaw
+
+```bash
+npx clawhub@latest install riseup
+```
+
+#### Headless / VPS setup
+
+OpenClaw often runs on a VPS with no display. Login requires a browser, so authenticate on your local machine first and copy the session:
+
+```bash
+# On your LOCAL machine (has a browser):
+npm install -g riseup-cli
+npx playwright install chromium
+riseup login
+
+# Copy session to VPS:
+scp ~/.config/riseup-cli/session.json user@your-vps:~/.config/riseup-cli/session.json
+
+# On the VPS:
+npm install -g riseup-cli
+riseup status    # Should show "Logged in ✓"
+```
+
+Sessions last ~30 days. Run `riseup status` to check remaining time. Re-login locally and copy the session again when it expires.
+
 ### Try it
 
-Then just ask Claude in Claude Code or Cowork:
+Ask your agent:
 
 - *"How much did I spend this month?"*
 - *"What are my subscriptions?"*
