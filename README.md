@@ -4,9 +4,7 @@
 
 # riseup-cli
 
-**Unofficial CLI for [RiseUp](https://www.riseup.co.il) personal finance**
-
-Query your spending, income, balances, and more — straight from the terminal.
+**Unofficial CLI and agentic skill for [RiseUp](https://www.riseup.co.il) personal finance.** Full programmatic access to your financial data — including features the web app buries — via the terminal and AI agents like Claude Code, Claude Desktop, Codex, and OpenClaw.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm](https://img.shields.io/npm/v/riseup-cli?color=CB3837&logo=npm&logoColor=white)](https://www.npmjs.com/package/riseup-cli)
@@ -24,8 +22,16 @@ Query your spending, income, balances, and more — straight from the terminal.
 
 ---
 
-> [!NOTE]
-> RiseUp is an Israeli personal finance app with no public API. This CLI was built by reverse-engineering the internal API that powers the RiseUp web app, so you can access your own financial data programmatically — from the terminal or through AI agents like Claude Code. All requests go directly from your machine to RiseUp's servers using your own session cookies. Nothing is proxied, stored, or sent anywhere else.
+RiseUp is an Israeli personal finance app with no public API. This CLI was built by reverse-engineering the internal API that powers the RiseUp web app, so you can access your own financial data programmatically — from the terminal or through AI agents like Claude Code. All requests go directly from your machine to RiseUp's servers using your own session cookies. Nothing is proxied, stored, or sent anywhere else.
+
+> [!WARNING]
+> **Unofficial Library – Use at Your Own Risk**
+>
+> This tool uses **undocumented RiseUp APIs** that can change without notice.
+>
+> - **Not affiliated with RiseUp** – This is a community project
+> - **APIs may break** – RiseUp can change internal endpoints anytime
+> - **Your data stays local** – All requests go directly from your machine to RiseUp's servers using your own session cookies. Nothing is proxied, stored, or sent anywhere else.
 
 ## Features
 
@@ -195,11 +201,6 @@ npm install
 npm run build
 npm run dev -- spending    # Run in dev mode
 ```
-
-## Disclaimer
-
-> [!WARNING]
-> This is an unofficial tool and is not affiliated with or endorsed by RiseUp. Use at your own risk. The internal API may change at any time.
 
 ## License
 
