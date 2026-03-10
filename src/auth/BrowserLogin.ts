@@ -64,13 +64,11 @@ export async function browserLogin(): Promise<{
       throw new Error("No cookies found — login may not have completed.");
     }
 
-    // Find the earliest expiry among cookies that actually expire.
-    // Playwright uses -1 or 0 for session cookies (no expiry).
-    const expiries = playwrightCookies
-      .map((c) => c.expires)
-      .filter((e) => e > 0);
-    const expiresAt = expiries.length > 0
-      ? new Date(Math.min(...expiries) * 1000).toISOString()
+    // Find the auth token cookie expiry. Short-lived analytics cookies are
+    // ignored — we care about when the actual auth session expires.
+    const authCookie = playwrightCookies.find((c) => c.name === "__Host-auth-token");
+    const expiresAt = authCookie && authCookie.expires > 0
+      ? new Date(authCookie.expires * 1000).toISOString()
       : null;
 
     // Try to extract the commit hash from the app JS bundle filename.
