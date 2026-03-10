@@ -17,7 +17,7 @@ export async function loginAction(): Promise<void> {
     ),
   );
 
-  let result: { cookies: string; commitHash: string };
+  let result: { cookies: string; commitHash: string; expiresAt: string | null };
   try {
     result = await browserLogin();
   } catch (err) {
@@ -37,6 +37,7 @@ export async function loginAction(): Promise<void> {
       cookies: result.cookies,
       commitHash: result.commitHash,
       savedAt: new Date().toISOString(),
+      ...(result.expiresAt && { expiresAt: result.expiresAt }),
     });
   } catch (err) {
     console.error(
@@ -89,6 +90,25 @@ export async function statusAction(): Promise<void> {
 
     console.log(chalk.bold("Name:  ") + name);
     console.log(chalk.bold("Email: ") + pm.emailPiiValue);
+
+    // Show session expiry if available.
+    const session = new SessionManager();
+    const stored = await session.load();
+    if (stored?.expiresAt) {
+      const expires = new Date(stored.expiresAt);
+      const now = new Date();
+      const diffMs = expires.getTime() - now.getTime();
+      if (diffMs <= 0) {
+        console.log(chalk.bold("Session: ") + chalk.red("Expired"));
+      } else {
+        const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const parts = [];
+        if (days > 0) parts.push(`${days}d`);
+        parts.push(`${hours}h`);
+        console.log(chalk.bold("Expires: ") + `in ${parts.join(" ")} (${expires.toLocaleDateString()})`);
+      }
+    }
 
     // Fetch connected banks count.
     try {

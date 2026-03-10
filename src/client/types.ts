@@ -285,4 +285,5 @@ export interface StoredSession {
   cookies: string;
   commitHash: string;
   savedAt?: string;
+  expiresAt?: string;
 }

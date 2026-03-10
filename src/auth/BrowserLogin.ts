@@ -18,6 +18,7 @@ import { DEFAULT_COMMIT_HASH } from "../utils/config.js";
 export async function browserLogin(): Promise<{
   cookies: string;
   commitHash: string;
+  expiresAt: string | null;
 }> {
   const browserProfileDir = join(getConfigDir(), "browser-profile");
 
@@ -63,6 +64,15 @@ export async function browserLogin(): Promise<{
       throw new Error("No cookies found — login may not have completed.");
     }
 
+    // Find the earliest expiry among cookies that actually expire.
+    // Playwright uses -1 or 0 for session cookies (no expiry).
+    const expiries = playwrightCookies
+      .map((c) => c.expires)
+      .filter((e) => e > 0);
+    const expiresAt = expiries.length > 0
+      ? new Date(Math.min(...expiries) * 1000).toISOString()
+      : null;
+
     // Try to extract the commit hash from the app JS bundle filename.
     let commitHash = DEFAULT_COMMIT_HASH;
     try {
@@ -89,7 +99,7 @@ export async function browserLogin(): Promise<{
       // Commit-hash extraction is best-effort; fall back to default.
     }
 
-    return { cookies: cookieString, commitHash };
+    return { cookies: cookieString, commitHash, expiresAt };
   } finally {
     await context.close().catch(() => {});
   }
