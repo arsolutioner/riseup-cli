@@ -164,9 +164,27 @@ Common categories and their English translations:
 | "No budget data found" | Month too far back | Try a more recent month |
 | Navigation timeout | Site slow/down | Retry `riseup login` |
 
+## Budget Months vs Calendar Months
+
+RiseUp budget months may not align with calendar months — they depend on the user's cashflow start day setting. For example, the "March" budget month might cover Jan 30 – Feb 28, meaning actual March-dated transactions appear in the "April" budget month.
+
+When the user asks for a specific calendar month (e.g. "show me March transactions"):
+
+1. Fetch with `--json` and check the actual date range of the returned transactions
+2. If the dates don't match the requested calendar month, try the next budget month (e.g. `2026-04` for actual March dates)
+3. Always tell the user the actual date range so they understand what they're looking at
+
+Example: User asks "show March spending" on March 10:
+```bash
+# First try — may return Feb dates (budget month offset)
+riseup transactions 2026-03 --json
+# Check dates in output — if they're Feb dates, try next month
+riseup transactions 2026-04 --json
+```
+
 ## Known Limitations
 
 - Data goes back ~10 months (RiseUp API limitation)
 - Login requires a real Chrome browser (Google OAuth blocks automation)
 - Category names are in Hebrew (translate for English-speaking users)
-- Budget months may not align with calendar months (depends on cashflow start day)
+- Budget months may not align with calendar months (see section above)
