@@ -161,9 +161,19 @@ Commands that accept a `[month]` argument support:
 
 riseup-cli ships with a skill that works with [Claude Code](https://claude.com/claude-code) and [Claude Desktop](https://claude.com/download) (Cowork) so Claude can query your finances directly using natural language.
 
+### Claude Code
+
 ```bash
 riseup skill install       # Install the skill
 ```
+
+### Claude Desktop / claude.ai
+
+1. Download `riseup-skill.zip` from the [latest release](https://github.com/arsolutioner/riseup-cli/releases/latest)
+2. Go to **Settings > Customize > Skills > "+" > Upload** and select the ZIP
+3. Toggle the skill ON
+
+### Try it
 
 Then just ask Claude in Claude Code or Cowork:
 
