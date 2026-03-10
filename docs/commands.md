@@ -56,7 +56,7 @@ riseup transactions --min 500 --max 2000     # Amount range
 
 ## balance
 
-Show current bank account balances across all connected accounts.
+Show bank account balances and investment portfolio (securities, savings accounts, loans, mortgages).
 
 ```bash
 riseup balance
@@ -77,12 +77,23 @@ Month-over-month comparison of income vs. expenses.
 ```bash
 riseup trends              # 3-month comparison (income vs expenses vs net)
 riseup trends 6            # 6-month comparison
-riseup trends --by category # Breakdown by category over time
+riseup trends --by category   # Breakdown by category over time
+riseup trends --by breakdown  # Fixed vs variable expenses
 ```
 
 | Flag | Description |
 |------|-------------|
-| `--by <dimension>` | Breakdown level: `total` or `category` (default: `total`) |
+| `--by <dimension>` | Breakdown: `total`, `category`, or `breakdown` (default: `total`) |
+
+## progress
+
+Show financial health metrics and savings recommendations.
+
+```bash
+riseup progress
+```
+
+Displays average monthly cashflow, positive months count, total savings, recommended monthly savings, current cashflow status, and biggest spending increase with top merchant.
 
 ## plans
 
@@ -104,7 +115,7 @@ riseup insights
 
 ### account banks
 
-Show connected banks and cards.
+Show connected banks and cards with connection status, account numbers, and last sync time.
 
 ```bash
 riseup account banks
