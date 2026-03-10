@@ -1,6 +1,6 @@
 {
   "name": "riseup-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Unofficial CLI for RiseUp personal finance, query your spending, income and balances from the terminal",
   "type": "module",
   "bin": {
