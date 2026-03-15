@@ -195,7 +195,15 @@ Review the list, then for each transaction:
 riseup classify <transactionId> "מזון"
 riseup classify <transactionId> "רכב" --apply-to all
 ```
-Use `--apply-to all` to teach RiseUp to auto-classify future transactions from the same merchant.
+Use `--apply-to all` (default) to teach RiseUp to auto-classify future transactions from the same merchant. Use `--apply-to single` to classify only this transaction.
+
+Available categories (use Hebrew names):
+- כלכלה (Groceries), אוכל בחוץ (Eating Out), רכב (Car), מזון (Food)
+- קניות (Shopping), ביגוד והנעלה (Clothing), פארמה (Pharmacy), בריאות (Health)
+- דיגיטל (Digital), תקשורת (Telecom), תחבורה ציבורית (Public Transport), פנאי (Leisure)
+- ביטוח (Insurance), ארנונה (Property Tax), חשמל (Electricity), עמלות (Fees)
+- העברות (Transfers), תשלומים (Payments), שיק (Check), תרומה (Donations)
+- ביטוח לאומי (National Insurance), מס הכנסה (Income Tax), משכורת (Salary), קצבאות (Benefits)
 
 ### "Exclude duplicate/transfer transactions"
 ```bash
