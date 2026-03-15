@@ -129,6 +129,135 @@ Show subscription details.
 riseup account subscription
 ```
 
+## Transaction Management
+
+Commands that modify your RiseUp data. Use with care.
+
+### unclassified
+
+List transactions categorized as "כללי" (General) — these need classification.
+
+```bash
+riseup unclassified                # Current month
+riseup unclassified prev           # Previous month
+riseup unclassified --json         # JSON output with transaction IDs
+```
+
+### classify
+
+Classify a transaction into a category. By default (`--apply-to all`), also teaches RiseUp to auto-classify future transactions from the same merchant.
+
+```bash
+riseup classify <transactionId> "מזון"                   # Classify + teach future
+riseup classify <transactionId> "רכב" --apply-to single  # This transaction only
+```
+
+| Flag | Description |
+|------|-------------|
+| `--apply-to <scope>` | `all` (default) = teach future matching, `single` = this transaction only |
+
+Available categories (Hebrew names):
+
+| Category | English |
+|----------|---------|
+| כלכלה | Groceries |
+| אוכל בחוץ | Eating Out |
+| מזון | Food |
+| רכב | Car/Vehicle |
+| קניות | Shopping |
+| ביגוד והנעלה | Clothing & Shoes |
+| פארמה | Pharmacy |
+| בריאות | Health |
+| דיגיטל | Digital |
+| תקשורת | Telecom |
+| תחבורה ציבורית | Public Transport |
+| פנאי | Leisure |
+| ביטוח | Insurance |
+| ארנונה | Property Tax |
+| חשמל | Electricity |
+| עמלות | Fees |
+| העברות | Transfers |
+| תשלומים | Payments |
+| שיק | Check |
+| תרומה | Donations |
+| ביטוח לאומי | National Insurance |
+| מס הכנסה | Income Tax |
+
+### rename
+
+Change a transaction's display name.
+
+```bash
+riseup rename <transactionId> "Grocery Store"
+riseup rename <transactionId> "Monthly Rent" --apply-to all  # Rename all future matches too
+```
+
+| Flag | Description |
+|------|-------------|
+| `--apply-to <scope>` | `single` (default) = this transaction only, `all` = future matching too |
+
+### comment
+
+Add a note/comment to a transaction.
+
+```bash
+riseup comment <transactionId> "monthly recurring"
+```
+
+### exclude
+
+Exclude a transaction from budget calculations (e.g., duplicates, internal transfers).
+
+```bash
+riseup exclude <transactionId>
+```
+
+### include
+
+Re-include a previously excluded transaction back into the budget.
+
+```bash
+riseup include <transactionId>
+```
+
+### merge
+
+Approve a credit card billing merge — confirms that a bank debit matches its credit card transactions.
+
+```bash
+riseup merge <transactionId>                    # Approve (default)
+riseup merge <transactionId> --input loan       # Mark as loan repayment
+```
+
+| Flag | Description |
+|------|-------------|
+| `--input <type>` | `approved` (default), `loan`, `clearing`, `addCreds`, `bug` |
+
+### set-budget-type
+
+Mark a transaction as a fixed or variable expense.
+
+```bash
+riseup set-budget-type <transactionId> fixed      # Fixed (rent, insurance, etc.)
+riseup set-budget-type <transactionId> variable    # Variable (groceries, eating out, etc.)
+```
+
+### adjust
+
+Adjust a predicted transaction amount.
+
+```bash
+riseup adjust <envelopeId> 500 --sequence-id <seqId>
+riseup adjust <envelopeId> 500 --sequence-id <seqId> --budget-date 2026-03
+riseup adjust <envelopeId> 500 --sequence-id <seqId> --no-permanent
+```
+
+| Flag | Description |
+|------|-------------|
+| `--sequence-id <id>` | Sequence ID (required) |
+| `--budget-date <date>` | Budget month YYYY-MM (default: current) |
+| `--no-permanent` | Apply only for this month |
+
 ## login / logout / status
 
 Authentication commands.
