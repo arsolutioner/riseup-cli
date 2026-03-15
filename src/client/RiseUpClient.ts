@@ -93,6 +93,44 @@ export class RiseUpClient {
     customerProgress: () => this.getCustomerProgress(),
   };
 
+  /** Transaction write operations. */
+  transactions = {
+    classify: (transactionId: string, expense: string, applyTo: "single" | "all" = "all") =>
+      this.http.post("/api/enrichment-update/save-enrichment", { transactionId, expense, applyTo }),
+
+    rename: (transactionId: string, displayName: string, applyTo: "single" | "all" = "single") =>
+      this.http.post("/api/enrichment-update/save-enrichment", { transactionId, displayName, applyTo }),
+
+    comment: (transactionId: string, comment: string) =>
+      this.http.post("/api/enrichment-update/save-comments", { transactionId, comment }),
+
+    exclude: (transactionId: string) =>
+      this.http.post("/api/investigator/answers/budget-category", { transactionId, budgetCategory: "excluded" }),
+
+    include: (transactionId: string) =>
+      this.http.post("/api/investigator/answers/unexclude-transaction", { transactionId }),
+
+    setBudgetType: (transactionId: string, budgetCategory: "fixed" | "variable") =>
+      this.http.post("/api/investigator/answers/budget-category", { transactionId, budgetCategory }),
+
+    merge: (transactionId: string, input: string = "approved") =>
+      this.http.post("/api/investigator/answers/merge", { papasMergeInput: [{ transactionId, input }] }),
+
+    adjustPrediction: (payload: {
+      envelopeId: string;
+      amount: number;
+      applyOnBudgetDate: string;
+      sequenceId: string;
+      isPermanent?: boolean;
+      monthsAhead?: number;
+    }) =>
+      this.http.post("/api/prediction-update/update-amount", {
+        ...payload,
+        isPermanent: payload.isPermanent ?? true,
+        monthsAhead: payload.monthsAhead ?? 1,
+      }),
+  };
+
   // ═══════════════════════════════════════════
   //  Direct API methods
   // ═══════════════════════════════════════════

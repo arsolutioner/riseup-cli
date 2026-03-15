@@ -42,6 +42,27 @@ Query your personal finance data from [RiseUp](https://input.riseup.co.il) (Isra
 - `riseup login` (opens browser)
 - `riseup logout` (clears session)
 
+### ALWAYS ask user before running (write operations)
+These commands modify your RiseUp account data. Before running any of them:
+1. Explain what the command will change and any side effects
+2. Show the exact command to be executed
+3. Wait for explicit user confirmation
+
+Write commands:
+- `riseup classify` — changes transaction category; with `--apply-to all` also teaches future auto-classification
+- `riseup rename` — changes transaction display name
+- `riseup comment` — adds a note to a transaction
+- `riseup exclude` — removes transaction from budget calculations
+- `riseup include` — adds excluded transaction back to budget
+- `riseup merge` — confirms credit card billing merge (irreversible)
+- `riseup set-budget-type` — marks transaction as fixed or variable expense
+- `riseup adjust` — changes predicted transaction amount
+
+For batch operations (e.g., classifying multiple unclassified transactions):
+- First run `riseup unclassified --json` to show what needs attention
+- Present all planned changes in a table
+- Ask user to confirm the batch before executing
+
 ## Quick Reference
 
 | Task | Command |
@@ -69,6 +90,17 @@ Query your personal finance data from [RiseUp](https://input.riseup.co.il) (Isra
 | Connected banks & status | `riseup account banks` |
 | Subscription details | `riseup account subscription` |
 | Login status | `riseup status` |
+| List unclassified transactions | `riseup unclassified` |
+| Unclassified for specific month | `riseup unclassified 2026-02` |
+| Classify a transaction | `riseup classify <id> "מזון"` |
+| Classify + teach future matching | `riseup classify <id> "מזון" --apply-to all` |
+| Rename a transaction | `riseup rename <id> "Grocery Store"` |
+| Add a comment/note | `riseup comment <id> "monthly recurring"` |
+| Exclude from budget | `riseup exclude <id>` |
+| Re-include in budget | `riseup include <id>` |
+| Approve CC billing merge | `riseup merge <id>` |
+| Set as fixed expense | `riseup set-budget-type <id> fixed` |
+| Set as variable expense | `riseup set-budget-type <id> variable` |
 
 ## Output Modes
 
@@ -153,6 +185,29 @@ riseup transactions 2026-01 --json
 riseup transactions 2026-02 --json
 riseup transactions current --json
 ```
+
+### "Classify all my unclassified transactions"
+```bash
+riseup unclassified --json
+```
+Review the list, then for each transaction:
+```bash
+riseup classify <transactionId> "מזון"
+riseup classify <transactionId> "רכב" --apply-to all
+```
+Use `--apply-to all` to teach RiseUp to auto-classify future transactions from the same merchant.
+
+### "Exclude duplicate/transfer transactions"
+```bash
+riseup exclude <transactionId>
+```
+To undo: `riseup include <transactionId>`
+
+### "Approve pending credit card merges"
+```bash
+riseup merge <transactionId>
+```
+Merge types: `--input approved` (default), `loan`, `clearing`, `addCreds`, `bug`
 
 ## Hebrew Category Names
 

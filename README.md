@@ -38,6 +38,7 @@ RiseUp is an Israeli personal finance app with no public API. This CLI was built
 - **Spending breakdown** — by category, merchant, or payment source
 - **Income tracking** — salary, benefits, and all income sources
 - **Transaction search** — filter by merchant, category, amount, type
+- **Transaction management** — classify, rename, comment, exclude, merge
 - **Bank balances & investments** — balances, securities portfolio, savings, loans
 - **Credit card debt** — debt per card at a glance
 - **Trends** — month-over-month income vs. expenses, fixed vs. variable breakdown
@@ -114,6 +115,21 @@ riseup transactions --search "carrefour"     # Search by merchant
 riseup transactions --category "רכב"         # Filter by category
 riseup transactions --expenses --sort amount # Expenses sorted by amount
 riseup transactions --min 500 --max 2000     # Amount range
+```
+
+### Transaction Management
+
+```bash
+riseup unclassified                          # List unclassified transactions
+riseup classify <id> "מזון"                  # Classify a transaction
+riseup classify <id> "מזון" --apply-to all   # Classify + teach future matching
+riseup rename <id> "Grocery Store"           # Rename display name
+riseup comment <id> "monthly recurring"      # Add a note
+riseup exclude <id>                          # Exclude from budget
+riseup include <id>                          # Re-include in budget
+riseup merge <id>                            # Approve CC billing merge
+riseup set-budget-type <id> fixed            # Set as fixed expense
+riseup adjust <envId> 500 --sequence-id <seqId>  # Adjust prediction
 ```
 
 ### Balances

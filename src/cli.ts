@@ -10,13 +10,24 @@ import { insightsAction } from "./commands/insights.js";
 import { banksAction, subscriptionAction } from "./commands/account.js";
 import { progressAction } from "./commands/progress.js";
 import { skillInstallAction, skillStatusAction, skillUninstallAction, skillShowAction } from "./commands/skill.js";
+import {
+  classifyAction,
+  renameAction,
+  commentAction,
+  excludeAction,
+  includeAction,
+  mergeAction,
+  unclassifiedAction,
+  setBudgetTypeAction,
+  adjustAction,
+} from "./commands/manage.js";
 
 const program = new Command();
 
 program
   .name("riseup")
   .description("Unofficial RiseUp Finance CLI")
-  .version("0.1.0");
+  .version("0.4.0");
 
 // Global options
 program.option("--json", "Output as JSON");
@@ -95,6 +106,58 @@ program
   .command("progress")
   .description("Show financial health & savings progress")
   .action(progressAction);
+
+// Transaction management (write) commands
+program
+  .command("classify <transactionId> <category>")
+  .description("Classify a transaction into a category")
+  .option("--apply-to <scope>", "Apply to: single or all (future matching)", "all")
+  .action(classifyAction);
+
+program
+  .command("rename <transactionId> <name>")
+  .description("Rename a transaction display name")
+  .option("--apply-to <scope>", "Apply to: single or all", "single")
+  .action(renameAction);
+
+program
+  .command("comment <transactionId> <text>")
+  .description("Add a comment/note to a transaction")
+  .action(commentAction);
+
+program
+  .command("exclude <transactionId>")
+  .description("Exclude a transaction from budget")
+  .action(excludeAction);
+
+program
+  .command("include <transactionId>")
+  .description("Re-include an excluded transaction in budget")
+  .action(includeAction);
+
+program
+  .command("merge <transactionId>")
+  .description("Approve a credit card billing merge")
+  .option("--input <type>", "Merge type: approved, loan, clearing, addCreds, bug", "approved")
+  .action(mergeAction);
+
+program
+  .command("unclassified [month]")
+  .description("List unclassified transactions")
+  .action(unclassifiedAction);
+
+program
+  .command("set-budget-type <transactionId> <type>")
+  .description("Set transaction as fixed or variable expense")
+  .action(setBudgetTypeAction);
+
+program
+  .command("adjust <envelopeId> <amount>")
+  .description("Adjust a predicted transaction amount")
+  .option("--sequence-id <id>", "Sequence ID (required)")
+  .option("--budget-date <date>", "Budget month (YYYY-MM, default: current)")
+  .option("--no-permanent", "Apply only for this month")
+  .action(adjustAction);
 
 const accountCmd = program
   .command("account")

@@ -50,6 +50,20 @@ export class HttpClient {
     return this.request<T>(path, "POST", body, "json");
   }
 
+  /**
+   * Perform a POST request expecting a plain-text response.
+   */
+  async postText(path: string, body?: unknown): Promise<string> {
+    return this.request<string>(path, "POST", body, "text");
+  }
+
+  /**
+   * Perform a PUT request against the RiseUp API.
+   */
+  async put<T = unknown>(path: string, body?: unknown): Promise<T> {
+    return this.request<T>(path, "PUT", body, "json");
+  }
+
   // ── internal ────────────────────────────────
 
   private async request<T>(

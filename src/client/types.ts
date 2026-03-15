@@ -433,3 +433,31 @@ export interface StoredSession {
   savedAt?: string;
   expiresAt?: string;
 }
+
+// ── Write Operation Payloads ────────────────
+
+export interface SaveEnrichmentPayload {
+  transactionId: string;
+  expense?: string;
+  displayName?: string;
+  applyTo?: "single" | "all";
+}
+
+export interface SaveCommentPayload {
+  transactionId: string;
+  comment: string;
+}
+
+export interface BudgetCategoryPayload {
+  transactionId: string;
+  budgetCategory: "fixed" | "variable" | "excluded";
+  monthsDiff?: number;
+  expenseCategory?: string;
+}
+
+export interface MergeAnswerPayload {
+  papasMergeInput: Array<{
+    transactionId: string;
+    input: "approved" | "loan" | "clearing" | "addCreds" | "bug";
+  }>;
+}
