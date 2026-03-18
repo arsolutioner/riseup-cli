@@ -82,12 +82,14 @@ export async function transactionsAction(
     if (json) {
       printJson(
         transactions.map((tx) => ({
+          transactionId: tx.transactionId,
           date: tx.transactionDate,
           amount: getDisplayAmount(tx),
           businessName: tx.businessName,
           category: tx.expense,
           source: tx.source,
           isIncome: tx.isIncome,
+          ...(tx.customerComment ? { comment: tx.customerComment } : {}),
         })),
       );
       return;

@@ -55,6 +55,7 @@ export interface Transaction {
   sequencerName?: string;
   modelScore?: number;
   aiEnrichment?: AiEnrichment;
+  customerComment?: string;
   accountNumberPiiValue?: string;
 }
 
@@ -439,7 +440,7 @@ export interface StoredSession {
 export interface SaveEnrichmentPayload {
   transactionId: string;
   expense?: string;
-  displayName?: string;
+  businessName?: string;
   applyTo?: "single" | "all";
 }
 

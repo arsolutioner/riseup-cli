@@ -95,26 +95,26 @@ export class RiseUpClient {
 
   /** Transaction write operations. */
   transactions = {
-    classify: (transactionId: string, expense: string, applyTo: "single" | "all" = "all") =>
-      this.http.post("/api/enrichment-update/save-enrichment", { transactionId, expense, applyTo }),
+    classify: (transactionId: string, businessName: string, expense: string, applyTo: "single" | "all" = "all") =>
+      this.http.postText("/api/enrichment-update/save-enrichment", { transactionId, businessName, expense, applyTo }),
 
-    rename: (transactionId: string, displayName: string, applyTo: "single" | "all" = "single") =>
-      this.http.post("/api/enrichment-update/save-enrichment", { transactionId, displayName, applyTo }),
+    rename: (transactionId: string, businessName: string, expense: string, applyTo: "single" | "all" = "single") =>
+      this.http.postText("/api/enrichment-update/save-enrichment", { transactionId, businessName, expense, applyTo }),
 
     comment: (transactionId: string, comment: string) =>
-      this.http.post("/api/enrichment-update/save-comments", { transactionId, comment }),
+      this.http.postText("/api/enrichment-update/save-comments", { transactionId, comment }),
 
     exclude: (transactionId: string) =>
-      this.http.post("/api/investigator/answers/budget-category", { transactionId, budgetCategory: "excluded" }),
+      this.http.postText("/api/investigator/answers/budget-category", { transactionId, budgetCategory: "excluded" }),
 
     include: (transactionId: string) =>
-      this.http.post("/api/investigator/answers/unexclude-transaction", { transactionId }),
+      this.http.postText("/api/investigator/answers/unexclude-transaction", { transactionId }),
 
     setBudgetType: (transactionId: string, budgetCategory: "fixed" | "variable") =>
-      this.http.post("/api/investigator/answers/budget-category", { transactionId, budgetCategory }),
+      this.http.postText("/api/investigator/answers/budget-category", { transactionId, budgetCategory }),
 
     merge: (transactionId: string, input: string = "approved") =>
-      this.http.post("/api/investigator/answers/merge", { papasMergeInput: [{ transactionId, input }] }),
+      this.http.postText("/api/investigator/answers/merge", { papasMergeInput: [{ transactionId, input }] }),
 
     adjustPrediction: (payload: {
       envelopeId: string;
@@ -124,7 +124,7 @@ export class RiseUpClient {
       isPermanent?: boolean;
       monthsAhead?: number;
     }) =>
-      this.http.post("/api/prediction-update/update-amount", {
+      this.http.postText("/api/prediction-update/update-amount", {
         ...payload,
         isPermanent: payload.isPermanent ?? true,
         monthsAhead: payload.monthsAhead ?? 1,
@@ -147,11 +147,19 @@ export class RiseUpClient {
 
   /**
    * Fetch budgets starting from a given date.
+   *
+   * The RiseUp API has a +1 month offset: requesting "2026-03" returns
+   * budgetDate "2026-02". We compensate here so callers get the month
+   * they actually asked for.
+   *
    * @param date  e.g. "2026-03"
    * @param count number of months to fetch (default 1)
    */
   async getBudgets(date: string, count = 1): Promise<Budget[]> {
-    return this.http.getJson<Budget[]>(`/api/budget/${date}/${count}`);
+    const [year, month] = date.split("-").map(Number);
+    const adjusted = new Date(year, month, 1); // month is already 1-based, so this adds +1
+    const apiDate = `${adjusted.getFullYear()}-${String(adjusted.getMonth() + 1).padStart(2, "0")}`;
+    return this.http.getJson<Budget[]>(`/api/budget/${apiDate}/${count}`);
   }
 
   /** Get the oldest budget date the user has (e.g. "2025-06"). */

@@ -1,12 +1,32 @@
 import chalk from "chalk";
 import type { Command } from "commander";
 import type { Transaction } from "../client/types.js";
+import type { RiseUpClient } from "../client/RiseUpClient.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
 import { withClient } from "./helpers.js";
 import { fetchBudgetTransactions } from "./budget-helpers.js";
+
+/**
+ * Search current and previous month budgets for a transaction by ID.
+ * Returns the Transaction if found, or null.
+ */
+async function findTransaction(
+  client: RiseUpClient,
+  transactionId: string,
+): Promise<Transaction | null> {
+  // Try current month first, then previous
+  for (const month of ["current", "prev"] as const) {
+    const date = parseMonth(month === "current" ? undefined : "prev");
+    const result = await fetchBudgetTransactions(client, date);
+    if (!result) continue;
+    const tx = result.transactions.find((t) => t.transactionId === transactionId);
+    if (tx) return tx;
+  }
+  return null;
+}
 
 // ── classify ────────────────────────────────
 
@@ -21,7 +41,20 @@ export async function classifyAction(
   const applyTo = (opts.applyTo as "single" | "all") ?? "all";
 
   await withClient(async (client) => {
-    await client.transactions.classify(transactionId, category, applyTo);
+    // The save-enrichment API requires the businessName field.
+    const tx = await findTransaction(client, transactionId);
+    if (!tx) {
+      const msg = `Transaction ${transactionId} not found in current or previous month budgets.`;
+      if (json) {
+        printJson({ error: msg });
+      } else {
+        console.error(chalk.red(msg));
+      }
+      process.exitCode = 1;
+      return;
+    }
+
+    await client.transactions.classify(transactionId, tx.businessName, category, applyTo);
     if (json) {
       printJson({ success: true, transactionId, category, applyTo });
     } else {
@@ -43,9 +76,23 @@ export async function renameAction(
   const applyTo = (opts.applyTo as "single" | "all") ?? "single";
 
   await withClient(async (client) => {
-    await client.transactions.rename(transactionId, name, applyTo);
+    // The save-enrichment API requires the expense (category) field.
+    // Look up the transaction to get its current category.
+    const tx = await findTransaction(client, transactionId);
+    if (!tx) {
+      const msg = `Transaction ${transactionId} not found in current or previous month budgets.`;
+      if (json) {
+        printJson({ error: msg });
+      } else {
+        console.error(chalk.red(msg));
+      }
+      process.exitCode = 1;
+      return;
+    }
+
+    await client.transactions.rename(transactionId, name, tx.expense, applyTo);
     if (json) {
-      printJson({ success: true, transactionId, displayName: name, applyTo });
+      printJson({ success: true, transactionId, businessName: name, expense: tx.expense, applyTo });
     } else {
       console.log(chalk.green(`Transaction ${transactionId} renamed to "${name}" (apply: ${applyTo})`));
     }

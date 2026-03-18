@@ -114,7 +114,6 @@ Always use `--json` when you need to do custom analysis (e.g., finding subscript
 Commands accepting a month argument support:
 - `current` — current budget month (default)
 - `prev` — previous month
-- `-1`, `-2`, `-3` — relative months back
 - `2026-02` — specific year-month
 
 Data is available for approximately 10 months back.

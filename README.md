@@ -178,7 +178,6 @@ Commands that accept a `[month]` argument support:
 |--------|---------|-------------|
 | `current` | `riseup spending current` | Current budget month (default) |
 | `prev` | `riseup spending prev` | Previous month |
-| `-N` | `riseup spending -2` | N months back |
 | `YYYY-MM` | `riseup spending 2026-01` | Specific month |
 
 ## AI Agent Skills

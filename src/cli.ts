@@ -27,7 +27,7 @@ const program = new Command();
 program
   .name("riseup")
   .description("Unofficial RiseUp Finance CLI")
-  .version("0.4.0");
+  .version("0.4.1");
 
 // Global options
 program.option("--json", "Output as JSON");
