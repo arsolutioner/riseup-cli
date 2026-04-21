@@ -88,6 +88,7 @@ export async function transactionsAction(
           businessName: tx.businessName,
           category: tx.expense,
           source: tx.source,
+          ...(tx.accountNumberPiiValue ? { accountNumber: tx.accountNumberPiiValue } : {}),
           isIncome: tx.isIncome,
           ...(tx.customerComment ? { comment: tx.customerComment } : {}),
         })),
@@ -97,7 +98,7 @@ export async function transactionsAction(
 
     // Table output.
     const table = createTable({
-      head: ["Date", "Amount", "Merchant", "Category", "Source"],
+      head: ["Date", "Amount", "Merchant", "Category", "Source", "Account"],
     });
 
     for (const tx of transactions) {
@@ -109,6 +110,7 @@ export async function transactionsAction(
         tx.businessName,
         tx.expense,
         tx.source,
+        tx.accountNumberPiiValue ?? "",
       ]);
     }
 
