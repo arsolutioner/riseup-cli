@@ -241,6 +241,7 @@ export async function unclassifiedAction(
           businessName: tx.businessName,
           category: tx.expense,
           source: tx.source,
+          ...(tx.accountNumberPiiValue ? { accountNumber: tx.accountNumberPiiValue } : {}),
         })),
       );
       return;
