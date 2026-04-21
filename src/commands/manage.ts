@@ -2,6 +2,7 @@ import chalk from "chalk";
 import type { Command } from "commander";
 import type { Transaction } from "../client/types.js";
 import type { RiseUpClient } from "../client/RiseUpClient.js";
+import { getEffectiveCategory } from "../client/categories.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
@@ -239,7 +240,7 @@ export async function unclassifiedAction(
           date: tx.transactionDate,
           amount: Math.abs(tx.billingAmount ?? 0),
           businessName: tx.businessName,
-          category: tx.expense,
+          category: getEffectiveCategory(tx),
           source: tx.source,
         })),
       );

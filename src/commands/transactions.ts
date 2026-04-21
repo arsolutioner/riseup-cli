@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import type { Command } from "commander";
 import type { Transaction } from "../client/types.js";
+import { getEffectiveCategory } from "../client/categories.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
@@ -49,7 +50,7 @@ export async function transactionsAction(
     if (category) {
       const lowerCategory = category.toLowerCase();
       transactions = transactions.filter(
-        (tx) => tx.expense.toLowerCase() === lowerCategory,
+        (tx) => getEffectiveCategory(tx).toLowerCase() === lowerCategory,
       );
     }
     if (min != null) {
@@ -86,7 +87,7 @@ export async function transactionsAction(
           date: tx.transactionDate,
           amount: getDisplayAmount(tx),
           businessName: tx.businessName,
-          category: tx.expense,
+          category: getEffectiveCategory(tx),
           source: tx.source,
           isIncome: tx.isIncome,
           ...(tx.customerComment ? { comment: tx.customerComment } : {}),
@@ -107,7 +108,7 @@ export async function transactionsAction(
         tx.transactionDate,
         `${prefix}${formatNIS(amount)}`,
         tx.businessName,
-        tx.expense,
+        getEffectiveCategory(tx),
         tx.source,
       ]);
     }
