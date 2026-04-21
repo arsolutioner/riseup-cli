@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import type { Command } from "commander";
+import { getEffectiveCategory } from "../client/categories.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
@@ -40,7 +41,7 @@ export async function spendingAction(
     // Apply --category filter.
     const filtered = category
       ? expenses.filter(
-          (tx) => tx.expense.toLowerCase() === category.toLowerCase(),
+          (tx) => getEffectiveCategory(tx).toLowerCase() === category.toLowerCase(),
         )
       : expenses;
 
@@ -57,7 +58,7 @@ export async function spendingAction(
           break;
         case "category":
         default:
-          key = tx.expense || "(uncategorized)";
+          key = getEffectiveCategory(tx) || "(uncategorized)";
           break;
       }
 

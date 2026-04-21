@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import type { Command } from "commander";
+import { getEffectiveCategory } from "../client/categories.js";
 import { parseMonth } from "../utils/dates.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
@@ -29,7 +30,7 @@ export async function incomeAction(
 
     // Apply --salary-only filter.
     const filtered = salaryOnly
-      ? allTransactions.filter((tx) => tx.expense === "\u05DE\u05E9\u05DB\u05D5\u05E8\u05EA")
+      ? allTransactions.filter((tx) => getEffectiveCategory(tx) === "\u05DE\u05E9\u05DB\u05D5\u05E8\u05EA")
       : allTransactions;
 
     // Sort by date.
@@ -45,7 +46,7 @@ export async function incomeAction(
           date: tx.transactionDate,
           amount: tx.incomeAmount,
           businessName: tx.businessName,
-          category: tx.expense,
+          category: getEffectiveCategory(tx),
         })),
       );
       return;
@@ -61,7 +62,7 @@ export async function incomeAction(
         tx.transactionDate,
         formatNIS(tx.incomeAmount ?? 0),
         tx.businessName,
-        tx.expense,
+        getEffectiveCategory(tx),
       ]);
     }
 

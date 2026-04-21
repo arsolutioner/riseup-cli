@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import type { Command } from "commander";
 import type { Budget, CashflowTrends } from "../client/types.js";
+import { getEffectiveCategory } from "../client/categories.js";
 import { formatNIS } from "../formatters/currency.js";
 import { createTable, printTable } from "../formatters/table.js";
 import { printJson } from "../formatters/json.js";
@@ -131,7 +132,7 @@ function showByCategory(
 
     const categories = new Map<string, number>();
     for (const tx of expenses) {
-      const cat = tx.expense || "(uncategorized)";
+      const cat = getEffectiveCategory(tx) || "(uncategorized)";
       const amount = Math.abs(tx.billingAmount ?? 0);
       categories.set(cat, (categories.get(cat) ?? 0) + amount);
       globalCategoryTotals.set(cat, (globalCategoryTotals.get(cat) ?? 0) + amount);
